@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 using Repositories;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,15 @@ var service = builder.Services;
 
 service.AddDbContext<DatabaseContext>();
 service.AddAuthorization();
+
+#region DI Repositories
+service.AddScoped<IUserRepository, UserRepository>();
+#endregion
+
+#region DI Services
+service.AddScoped<IUserService, UserService>();
+#endregion
+
 
 service.AddIdentityApiEndpoints<UserEntity>().AddEntityFrameworkStores<DatabaseContext>();
 service.AddIdentityCore<UserEntity>(options =>
