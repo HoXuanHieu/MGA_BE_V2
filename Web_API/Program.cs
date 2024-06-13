@@ -19,6 +19,7 @@ service.AddAuthorization();
 
 #region DI Repositories
 service.AddScoped<IUserRepository, UserRepository>();
+service.AddScoped<ILoginRepository, LoginRepository>();
 #endregion
 
 #region DI Services
