@@ -14,7 +14,8 @@ namespace Repositories.Configurations
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.Property(x => x.UserName).HasMaxLength(100).IsRequired();
-            builder.Property(x => x.Password).HasMaxLength(100).IsRequired();
+            builder.Property(x => x.PasswordHash).IsRequired();
+            builder.Property(x => x.PasswordSalt).IsRequired();
             builder.Property(x => x.Email).HasMaxLength(100).IsRequired();
             builder.Property(x => x.Role).IsRequired();
             builder.Property(x => x.IsVerify).IsRequired().HasDefaultValue(false);

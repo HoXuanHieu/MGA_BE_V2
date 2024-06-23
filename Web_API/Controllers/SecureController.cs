@@ -1,32 +1,35 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.Entities;
+using Models.Request;
+using Models.Response;
+using Service;
+using Web_API.ResponseModel;
 
 namespace Web_API;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SecureController(SignInManager<UserEntity> sa, UserManager<UserEntity> um) : ControllerBase
+public class SecureController : ControllerBase
 {
-    private readonly SignInManager<UserEntity> signInManager;
-    private readonly UserManager<UserEntity> userManager;
+    private readonly ISecureService _secureService;
+    public SecureController(ISecureService secureService)
+    {
+        _secureService = secureService;
+    }
 
-    //public async Task<ActionResult> RegisterUser()
+    [HttpPost("register")]
+    public async Task<ActionResult<ApiResponse<UserResponse>>> Register(UserRegisterRequest request)
+    {
+        var result = await _secureService.RegisterAsync(request);
+        return StatusCode(result.Status, result);
+    }
+
+    //[HttpPost("login")]
+    //public async Task<ActionResult<UserResponse>> Login(LoginRequest request)
     //{
-    //    string message = "";
-    //    IdentityResult result = new();
-    //    try
-    //    {
-    //        UserEntity user = new UserEntity()
-    //        {
 
-    //        };
-    //    }
-
-    //    catch (Exception ex)
-    //    {
-
-    //    }
     //}
 }

@@ -24,24 +24,24 @@ service.AddScoped<ILoginRepository, LoginRepository>();
 
 #region DI Services
 service.AddScoped<IUserService, UserService>();
+service.AddScoped<ISecureService, SecureService>();
 #endregion
 
 
-service.AddIdentityApiEndpoints<UserEntity>().AddEntityFrameworkStores<DatabaseContext>();
-service.AddIdentityCore<UserEntity>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = true;
-    options.Password.RequireDigit = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 0;
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwsyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789-_.@";
-    options.User.RequireUniqueEmail = true;
-}).AddEntityFrameworkStores<DatabaseContext>();
+//service.AddIdentityCore<UserEntity>(options =>
+//{
+//    options.SignIn.RequireConfirmedAccount = true;
+//    options.Password.RequireDigit = true;
+//    options.Password.RequireNonAlphanumeric = true;
+//    options.Password.RequireUppercase = true;
+//    options.Password.RequiredLength = 6;
+//    options.Password.RequiredUniqueChars = 0;
+//    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+//    options.Lockout.MaxFailedAccessAttempts = 5;
+//    options.Lockout.AllowedForNewUsers = true;
+//    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwsyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789-_.@";
+//    options.User.RequireUniqueEmail = true;
+//}).AddEntityFrameworkStores<DatabaseContext>();
 
 var app = builder.Build();
 
@@ -55,7 +55,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.MapIdentityApi<UserEntity>();
+//app.MapIdentityApi<UserEntity>();
 app.MapControllers();
 
 app.Run();

@@ -5,9 +5,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models.Entities
 {
-    public class UserEntity : IdentityUser
+    public class UserEntity
     {
-
+        [Key]
+        public Guid UserId { get; set; } = Guid.NewGuid();
         [Required]
         [StringLength(100)]
         public String UserName { get; set; }
@@ -18,9 +19,10 @@ namespace Models.Entities
         public String Email { get; set; }
 
         [Required]
-        [StringLength(100)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")]
-        public String Password { get; set; }
+        public byte[] PasswordHash { get; set; }
+
+        [Required]
+        public byte[] PasswordSalt { get; set; }
 
         [Required]
         [RegularExpression(@"^(admin|reader|poster)$")]

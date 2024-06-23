@@ -19,11 +19,12 @@ public class UserService : IUserService
     {
         //String password = BcryptHelper.GeneratePassword();
         String password = "123456";
+
         var data = new UserEntity()
         {
             UserName = request.UserName,
             Email = request.Email,
-            Password = BcryptHelper.HashPassword(password),
+            //Password = 
             Role = request.Role
         };
         var isSuccess = await _repository.CreateUserAsync(data);
@@ -43,7 +44,7 @@ public class UserService : IUserService
         {
             result.Add(new UserResponse
             {
-                UserId = item.Id,
+                UserId = item.UserId.ToString(),
                 UserName = item.UserName,
                 Email = item.Email,
                 DateCreate = item.DateCreate,
