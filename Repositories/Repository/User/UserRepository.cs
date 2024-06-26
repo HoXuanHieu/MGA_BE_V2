@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<UserEntity>> GetAllUsersAsync()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Users.Where(x => !x.IsDelete).ToListAsync();
     }
 
 }

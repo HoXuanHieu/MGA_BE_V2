@@ -23,7 +23,6 @@ public class SecureService : ISecureService
     public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request)
     {
         var users = await _userRepository.GetAllUsersAsync();
-        //var users = new List<UserEntity> { new UserEntity { UserId = Guid.NewGuid(), UserName = "hieu", Email = "aaabbababa", Role = "admin" } };
         var checkUserExist = users.FirstOrDefault(x => x.UserName == request.UserName);
         if (checkUserExist == null)
             return new ApiResponse<LoginResponse>("UserName is not existed", null, 400);
@@ -39,6 +38,9 @@ public class SecureService : ISecureService
 
     public async Task<ApiResponse<UserResponse>> RegisterAsync(UserRegisterRequest request)
     {
+        string checkUser = await this.checkExistUser(request);
+        if (!checkUser.IsNullOrEmpty())
+            return new ApiResponse<UserResponse>(checkUser, null, 400);
         var userRegister = new UserEntity()
         {
             UserName = request.UserName,
@@ -53,7 +55,7 @@ public class SecureService : ISecureService
         {
             var user = await _userRepository.CreateUserAsync(userRegister);
             var result = GetUserResponse(userRegister);
-            if(result == null)
+            if (result == null)
             {
                 return new ApiResponse<UserResponse>("Register new user fail", result, 500);
             }
@@ -67,6 +69,16 @@ public class SecureService : ISecureService
             return new ApiResponse<UserResponse>(message, null, 500);
         }
 
+    }
+
+    private async Task<String> checkExistUser(UserRegisterRequest request)
+    {
+        var users = await _userRepository.GetAllUsersAsync();
+        if (users.Select(x => x.UserName).Contains(request.UserName))
+            return "UserName can not duplicate.";
+        else if (users.Select(x => x.Email).Contains(request.Email))
+            return "Email can not duplicate.";
+        return "";
     }
 
     private UserResponse GetUserResponse(UserEntity user)
