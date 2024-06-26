@@ -27,9 +27,10 @@ public class SecureController : ControllerBase
         return StatusCode(result.Status, result);
     }
 
-    //[HttpPost("login")]
-    //public async Task<ActionResult<UserResponse>> Login(LoginRequest request)
-    //{
-
-    //}
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+    {
+        var result = await _secureService.LoginAsync(request);    
+        return StatusCode(result.Status, result);
+    }
 }

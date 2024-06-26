@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Service.Helper
 {
-    public static class BcryptHelper
+    public static class PasswordHelper
     {
         private const int workFactor = 12;
         public static String HashPassword(String value)
@@ -41,6 +41,15 @@ namespace Service.Helper
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public static bool VerifyPasswordHash(String password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computed = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computed.SequenceEqual(passwordHash);
             }
         }
     }

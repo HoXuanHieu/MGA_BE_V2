@@ -28,11 +28,7 @@ public class UserService : IUserService
             Role = request.Role
         };
         var isSuccess = await _repository.CreateUserAsync(data);
-        if (isSuccess) {
-            //send email to user 
-            //show log in text here
-            return true;
-        }
+       
         return false;
     }
 

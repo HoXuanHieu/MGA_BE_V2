@@ -8,7 +8,7 @@ namespace Models.Entities
     public class UserEntity
     {
         [Key]
-        public Guid UserId { get; set; } = Guid.NewGuid();
+        public String UserId { get; set; } = Guid.NewGuid().ToString();
         [Required]
         [StringLength(100)]
         public String UserName { get; set; }

@@ -12,22 +12,20 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<bool> CreateUserAsync(UserEntity user)
+    public async Task<UserEntity> CreateUserAsync(UserEntity user)
     {
         var userCreate = await _context.Users.AddAsync(user);
         if (userCreate != null)
         {
-            return true;
+            await _context.SaveChangesAsync();
+            return userCreate.Entity;
         }
-        else
-        {
-            return false;
-        }
+        return null;
     }
 
     public async Task<List<UserEntity>> GetAllUsersAsync()
     {
         return await _context.Users.ToListAsync();
     }
-    
+
 }

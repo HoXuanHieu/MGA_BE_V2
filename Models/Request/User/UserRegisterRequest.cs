@@ -20,7 +20,7 @@ namespace Models.Request
 
         [Required]
         [StringLength(100)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")]
+        //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$")]
         public String Password { get; set; }
 
         [Required]

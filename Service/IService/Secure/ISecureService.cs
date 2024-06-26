@@ -8,5 +8,5 @@ namespace Service;
 public interface ISecureService
 {
     Task<ApiResponse<UserResponse>> RegisterAsync(UserRegisterRequest request);
-    Task<UserResponse> LoginAsync(LoginRequest request);
+    Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request);
 }
