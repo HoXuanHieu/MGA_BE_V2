@@ -25,15 +25,15 @@ public class SecureService : ISecureService
         var users = await _userRepository.GetAllUsersAsync();
         var checkUserExist = users.FirstOrDefault(x => x.UserName == request.UserName);
         if (checkUserExist == null)
-            return new ApiResponse<LoginResponse>("UserName is not existed", null, 400);
+            return new ApiResponse<LoginResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
         if (!PasswordHelper.VerifyPasswordHash(request.Password, checkUserExist.PasswordHash, checkUserExist.PasswordSalt))
-            return new ApiResponse<LoginResponse>("Wrong password! Please enter again", null, 400);
+            return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_lOGIN_WRONG_PASSWORD, null, 400);
         var response = new LoginResponse()
         {
             Token = CreateToken(checkUserExist),
             UserResponse = GetUserResponse(checkUserExist)
         };
-        return new ApiResponse<LoginResponse>("login success", response, 200);
+        return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_LOGIN_SUCCESSFUL, response, 200);
     }
 
     public async Task<ApiResponse<UserResponse>> RegisterAsync(UserRegisterRequest request)
@@ -57,10 +57,10 @@ public class SecureService : ISecureService
             var result = GetUserResponse(userRegister);
             if (result == null)
             {
-                return new ApiResponse<UserResponse>("Register new user fail", result, 500);
+                return new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_REGISTER_FAIL, result, 500);
             }
             //logic return status code 
-            var apiRespone = new ApiResponse<UserResponse>("User register successful", result, 200);
+            var apiRespone = new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_REGISTER_SUCCESSFUL, result, 200);
             return apiRespone;
         }
         catch (Exception ex)
@@ -75,9 +75,9 @@ public class SecureService : ISecureService
     {
         var users = await _userRepository.GetAllUsersAsync();
         if (users.Select(x => x.UserName).Contains(request.UserName))
-            return "UserName can not duplicate.";
+            return Common.Message.VALIDATE_MESSAGE_USER_NAME_DUPLICATE;
         else if (users.Select(x => x.Email).Contains(request.Email))
-            return "Email can not duplicate.";
+            return Common.Message.VALIDATE_MESSAGE_USER_EMAIL_DUPLICATE;
         return "";
     }
 
