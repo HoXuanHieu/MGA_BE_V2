@@ -81,8 +81,31 @@ public class UserService : IUserService
         throw new NotImplementedException();
     }
 
-    public Task<ApiResponse<UserResponse>> UpdateUserAsync(UpdateUserRequest request)
+    public async Task<ApiResponse<UserResponse>> UpdateUserAsync(UpdateUserRequest request)
     {
-        throw new NotImplementedException();
+        var userEmtity = await _repository.GetUserByIdAsync(request.UserId);
+        if (userEmtity == null)
+        {
+            return new ApiResponse<UserResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
+        }
+        userEmtity.UserName = request.UserName;
+        userEmtity.Email = request.Email;
+        userEmtity.Role = request.Role;
+        userEmtity.IsVerify = request.IsVerify;
+        userEmtity.IsDelete = request.IsDelete;
+        userEmtity.IsSuspension = request.IsSuspension;
+        userEmtity.DateUpdate = DateTime.Now;
+        var response = await _repository.UpdateUserAsync(userEmtity);
+        if (response.Equals(Common.Message.MESSAGE_USER_UPDATE_SUCCESSFUL))
+            return new ApiResponse<UserResponse>(response, new UserResponse(
+                userEmtity.UserId,
+                userEmtity.UserName,
+                userEmtity.Email,
+                userEmtity.DateCreate,
+                userEmtity.IsSuspension), 200);
+        else if (response.Equals(Common.Message.MESSAGE_USER_UPDATE_FAIL))
+            return new ApiResponse<UserResponse>(response, null, 500);
+        else
+            return new ApiResponse<UserResponse>("", null, 500);
     }
 }
