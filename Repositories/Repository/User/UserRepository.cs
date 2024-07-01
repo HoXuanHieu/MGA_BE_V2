@@ -12,14 +12,23 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<UserEntity> CreateUserAsync(UserEntity user)
+    public async Task<String> CreateUserAsync(UserEntity user)
     {
-        var userCreate = await _context.Users.AddAsync(user);
-        if (userCreate != null)
+        try
         {
-            await _context.SaveChangesAsync();
-            return userCreate.Entity;
+            var userCreate = await _context.Users.AddAsync(user);
+            if (userCreate != null)
+            {
+                await _context.SaveChangesAsync();
+                return Common.Message.MESSAGE_USER_CREATE_SUCCESSFUL;
+            }
         }
+        catch (Exception ex)
+        {
+            //logger 
+            return Common.Message.MESSAGE_USER_CREATE_FAIL;
+        }
+
         return null;
     }
 
@@ -37,6 +46,7 @@ public class UserRepository : IUserRepository
         }
         catch (Exception ex)
         {
+            //logger ex
             return Common.Message.MESSAGE_USER_DELETE_FAIL;
         }
     }
@@ -49,6 +59,12 @@ public class UserRepository : IUserRepository
     public async Task<UserEntity> GetUserByIdAsync(string userId)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+        return user == null ? null : user;
+    }
+
+    public async Task<UserEntity> GetUserByUserName(string userName)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
         return user == null ? null : user;
     }
 
