@@ -24,13 +24,13 @@
             return status switch
             {
                 //SUCCESS
-                200 => "",
+                200 => "Api return sucessfully",
                 201 => "",
                 //CLIENT ERROR
-                400 => "",
-                401 => "",
+                400 => "Something wrong when request api, please try again",
+                401 => "UnAuthorization, please try again",
                 //INTERNAL ERROR
-                500 => "",
+                500 => "Something wrong when call api",
             };
         }
     }
