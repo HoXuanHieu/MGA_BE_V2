@@ -17,6 +17,10 @@ public static class Message
     public readonly static String MESSAGE_USER_DELETE_FAIL = "Server get error when deleted user.";
     public readonly static String MESSAGE_USER_UPDATE_SUCCESSFUL = "User has been updated.";
     public readonly static String MESSAGE_USER_UPDATE_FAIL = "Server get error when updated user.";
+    public readonly static String MESSAGE_USER_LIST_EMPTY = "No Data for display";
+    public readonly static String MESSAGE_USER_GET_SUCCESSFUL = "Get users data success";
+    public readonly static String MESSAGE_USER_CREATE_SUCCESSFUL = "Create new user sucess";
+    public readonly static String MESSAGE_USER_CREATE_FAIL = "Create new user fail";
     #endregion
 
     #region LOGIN
