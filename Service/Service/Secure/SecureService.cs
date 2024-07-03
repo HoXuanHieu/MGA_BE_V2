@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Models.Entities;
@@ -15,9 +16,11 @@ namespace Service;
 public class SecureService : ISecureService
 {
     private readonly IUserRepository _userRepository;
-    public SecureService(IUserRepository userRepository)
+    private readonly ILogger<SecureService> _logger;
+    public SecureService(IUserRepository userRepository, ILogger<SecureService> logger)
     {
         _userRepository = userRepository;
+        _logger = logger;
     }
 
     public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request)
@@ -27,12 +30,15 @@ public class SecureService : ISecureService
         if (checkUserExist == null)
             return new ApiResponse<LoginResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
         if (!PasswordHelper.VerifyPasswordHash(request.Password, checkUserExist.PasswordHash, checkUserExist.PasswordSalt))
-            return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_lOGIN_WRONG_PASSWORD, null, 400);
+            return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_lOGIN_WRONG_PASSWORD, null, 109);
+        if (!checkUserExist.IsVerify)
+            return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_LOGIN_USER_UNVERIFY, null, 406);
         var response = new LoginResponse()
         {
             Token = CreateToken(checkUserExist),
             UserResponse = GetUserResponse(checkUserExist)
         };
+        _logger.LogInformation($"User {checkUserExist.UserName} login successful");
         return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_LOGIN_SUCCESSFUL, response, 200);
     }
 
@@ -60,12 +66,14 @@ public class SecureService : ISecureService
                 return new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_REGISTER_FAIL, result, 500);
             }
             //logic return status code 
+            _logger.LogInformation($"User {userRegister.UserName} register successful");
             var apiRespone = new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_REGISTER_SUCCESSFUL, result, 200);
             return apiRespone;
         }
         catch (Exception ex)
         {
-            string message = $"Error occurs when create user: {ex.Message}";
+            string message = $"Error occurs when register user: {ex.Message}";
+            _logger.LogError(message);
             return new ApiResponse<UserResponse>(message, null, 500);
         }
 
