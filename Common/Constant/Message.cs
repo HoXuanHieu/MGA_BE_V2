@@ -25,8 +25,9 @@ public static class Message
 
     #region LOGIN
     public readonly static String MESSAGE_USER_LOGIN_SUCCESSFUL = "login success";
-    public readonly static String MESSAGE_USER_LOGIN_FAIL = "";
+    public readonly static String MESSAGE_USER_LOGIN_FAIL = "User login fail";
     public readonly static String MESSAGE_USER_lOGIN_WRONG_PASSWORD = "Wrong password! Please enter again";
+    public readonly static String MESSAGE_USER_LOGIN_USER_UNVERIFY = "Account does not verify yet!";
     #endregion
 
     #region REGISTER
