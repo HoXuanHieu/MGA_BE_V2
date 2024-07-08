@@ -34,7 +34,7 @@ public class UserService : IUserService
         if (response.Equals(Common.Message.MESSAGE_USER_CREATE_SUCCESSFUL))
         {
             var user = await _repository.GetUserByUserName(request.UserName);
-            var userResponse = new UserResponse(user.UserId, user.UserName, user.Email, user.DateCreate, user.IsSuspension);
+            var userResponse = new UserResponse(user.UserId, user.UserName, user.Email, user.DateCreate, user.IsSuspension, user.IsVerify);
             return new ApiResponse<UserResponse>(response, userResponse, 200);
         }
         else
@@ -76,9 +76,16 @@ public class UserService : IUserService
         return new ApiResponse<List<UserResponse>>(Common.Message.MESSAGE_USER_GET_SUCCESSFUL, result, 200);
     }
 
-    public Task<ApiResponse<UserResponse>> GetUserById(string userId)
+    public async Task<ApiResponse<UserResponse>> GetUserById(string userId)
     {
-        throw new NotImplementedException();
+        var dataRepo = await _repository.GetUserByIdAsync(userId);
+        if (dataRepo == null)
+            return new ApiResponse<UserResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
+        else
+        {
+            var response = new UserResponse(dataRepo.UserId, dataRepo.UserName, dataRepo.Email, dataRepo.DateCreate, dataRepo.IsSuspension, dataRepo.IsVerify);
+            return new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_GET_SUCCESSFUL, response, 200);
+        }
     }
 
     public async Task<ApiResponse<UserResponse>> UpdateUserAsync(UpdateUserRequest request)
@@ -102,7 +109,8 @@ public class UserService : IUserService
                 userEmtity.UserName,
                 userEmtity.Email,
                 userEmtity.DateCreate,
-                userEmtity.IsSuspension), 200);
+                userEmtity.IsSuspension,
+                userEmtity.IsVerify), 200);
         else if (response.Equals(Common.Message.MESSAGE_USER_UPDATE_FAIL))
             return new ApiResponse<UserResponse>(response, null, 500);
         else
