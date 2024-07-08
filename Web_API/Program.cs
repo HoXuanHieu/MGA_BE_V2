@@ -24,6 +24,8 @@ service.AddScoped<IUserRepository, UserRepository>();
 #region DI Services
 service.AddScoped<IUserService, UserService>();
 service.AddScoped<ISecureService, SecureService>();
+service.AddScoped<IMangaService, MangaService>();
+service.AddScoped<IChapterService, ChapterService>();
 #endregion
 
 
@@ -49,6 +51,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseHsts();
+    app.UseExceptionHandler("/error");
 }
 
 app.UseHttpsRedirection();

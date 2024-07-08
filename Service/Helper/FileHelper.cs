@@ -1,24 +1,29 @@
-﻿namespace Service.Helper
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Service.Helper
 {
     public static class FileHelper
     {
-        public static async Task<string> SaveImageAsync(string base64, string folderName, string fileName)
+
+        //remember to check file extension before save in local directory
+        public static async Task<string> SaveImageAsync(string rootPath, IFormFile fileContent)
         {
             try
             {
-                byte[] bytes = Convert.FromBase64String(base64);
-                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderName);
-                if (!Directory.Exists(path))
+                if (!Directory.Exists(rootPath))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(rootPath);
                 }
-                path = Path.Combine(path, fileName);
-                await File.WriteAllBytesAsync(path, bytes);
-                return path;
+                using (FileStream stream = File.Create(rootPath + fileContent.FileName))
+                {
+                    await fileContent.CopyToAsync(stream);
+                    stream.Flush();
+                }
+                return fileContent.FileName;
             }
             catch (Exception ex)
             {
-                throw ex;
+                return Common.Message.MESSAGE_FILE_SAVE_FAIL + $" Error: {ex.Message}";
             }
         }
     }

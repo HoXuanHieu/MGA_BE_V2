@@ -34,5 +34,11 @@ public static class Message
     public readonly static String MESSAGE_USER_REGISTER_FAIL = "Register new user fail";
     #endregion
 
-
+    #region FILE_MESSAGE
+    public readonly static String MESSAGE_FILE_SAVE_SUCCESSFUL = "File has been saved.";
+    public readonly static String MESSAGE_FILE_SAVE_FAIL = "Server get error when save file.";
+    public readonly static String MESSAGE_FILE_EXTENSION_INVALID = "File extension is invalid.";
+    public readonly static String MESSAGE_FILE_NOT_FOUND = "File not found.";   
+    public readonly static String MESSAGE_FILE_DELETE_SUCCESSFUL = "File has been deleted.";
+    #endregion
 }
