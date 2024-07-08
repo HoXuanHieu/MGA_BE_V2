@@ -22,6 +22,13 @@ namespace Models.Entities
         public String MangaImage { get; set; }
 
         [Required]
+        [StringLength(500)]
+        public String Description { get; set; }
+
+        [Required]
+        public List<Categories> Categories { get; set; }
+
+        [Required]
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
         [Required]
@@ -34,8 +41,7 @@ namespace Models.Entities
         [Required]
         public String PostedBy { get; set; }
 
-
-        [JsonIgnoreAttribute]
+        //relationship
         public UserEntity user { get; set; }
 
         public List<ChapterEntity> chapters { get; set; }

@@ -1,5 +1,5 @@
 ﻿namespace Service;
 
-internal class ChapterService : IChapterService
+public class ChapterService : IChapterService
 {
 }
