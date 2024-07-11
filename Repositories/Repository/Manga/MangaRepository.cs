@@ -14,9 +14,20 @@ public class MangaRepository : IMangaRepository
         _logger = logger;
     }
 
-    public Task<string> CreateUserAsync(MangaEntity entity)
+    public async Task<String> CreateUserAsync(MangaEntity entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _context.AddAsync(entity);
+            _context.SaveChanges();
+            _logger.LogInformation($"Manga has been created successful");
+            return Common.Message.MESSAGE_MANGA_CREATE_SUCCESSFUL;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Server can not create new manga, with error: {ex.Message}");
+            return Common.Message.MESSAGE_MANGA_CREATE_FAIL;
+        }
     }
 
     public async Task<String> DeleteMangaByIdAsync(string mangaId)
@@ -30,9 +41,10 @@ public class MangaRepository : IMangaRepository
             result.IsDelete = true;
             _context.Update(result);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Create manga successful.");
             return Common.Message.MESSAGE_MANGA_DELETE_SUCCESSFUL;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError($"Delete manga fail with message: {ex.Message}");
             return Common.Message.MESSAGE_MANGA_DELETE_FAIL;
