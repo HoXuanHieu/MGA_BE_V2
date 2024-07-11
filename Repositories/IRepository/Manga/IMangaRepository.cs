@@ -5,8 +5,9 @@ namespace Repositories;
 
 public interface IMangaRepository
 {
-    Task<List<MangaEntity>> getallManga();
-    Task<MangaEntity> GetManagById(String mangaId);
-    Task<MangaEntity> UpdateManga(MangaEntity entity);
-    Task<bool> DeleteMangaById(String mangaId);
+    Task<List<MangaEntity>> GetAllMangaAsync();
+    Task<String> CreateUserAsync(MangaEntity entity);
+    Task<MangaEntity> GetManagByIdAsync(String mangaId);
+    Task<MangaEntity> UpdateMangaAsync(MangaEntity entity);
+    Task<String> DeleteMangaByIdAsync(String mangaId);
 }

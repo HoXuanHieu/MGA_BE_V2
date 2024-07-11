@@ -40,6 +40,17 @@ public static class Message
     public readonly static String MESSAGE_FILE_SAVE_FAIL = "Server get error when save file.";
     public readonly static String MESSAGE_FILE_EXTENSION_INVALID = "File extension is invalid.";
     public readonly static String MESSAGE_FILE_NOT_FOUND = "File not found.";   
-    public readonly static String MESSAGE_FILE_DELETE_SUCCESSFUL = "File has been deleted.";
+    public readonly static String MESSAGE_FILE_DELETE_SUCCESSFUL = $"File has been deleted successful at time {DateTime.UtcNow}.";
+    #endregion
+
+    #region MANGA_MESSAGE
+
+    public readonly static String MESSAGE_MANGA_DOES_NOT_EXIST = "Manga does not existed, please try double check it.";
+    public readonly static String MESSAGE_MANGA_DELETE_SUCCESSFUL = $"Manga has been deleted successful at time {DateTime.UtcNow}.";
+    public readonly static String MESSAGE_MANGA_DELETE_FAIL = $"Server fail to delete manga {DateTime.UtcNow},";
+    public readonly static String MESSAGE_MANGA_CREATE_SUCCESSFUL = $"Manga has been created successful at time {DateTime.UtcNow}.";
+    public readonly static String MESSAGE_MANGA_CREATE_FAIL = $"Server fail to create manga {DateTime.UtcNow},";
+    public readonly static String MESSAGE_MANGA_ALREADY_DELETE = "Manga has been deleted already!";
+
     #endregion
 }
