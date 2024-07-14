@@ -26,7 +26,7 @@ namespace Models.Entities
         public String Description { get; set; }
 
         [Required]
-        public List<Categories> Categories { get; set; }
+        public String Categories { get; set; }
 
         [Required]
         public DateTime DateCreated { get; set; } = DateTime.Now;
@@ -45,5 +45,14 @@ namespace Models.Entities
         public UserEntity user { get; set; }
 
         public List<ChapterEntity> chapters { get; set; }
+
+        public MangaEntity(string mangaName, string mangaImage, string description, string categrories, string postBy)
+        {
+            MangaName = mangaName;
+            MangaImage = mangaImage;
+            Description = description;
+            Categories = categrories;
+            PostedBy = postBy;
+        }
     }
 }
