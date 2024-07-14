@@ -14,7 +14,7 @@ public class MangaRepository : IMangaRepository
         _logger = logger;
     }
 
-    public async Task<String> CreateUserAsync(MangaEntity entity)
+    public async Task<String> CreateMangaAsync(MangaEntity entity)
     {
         try
         {
