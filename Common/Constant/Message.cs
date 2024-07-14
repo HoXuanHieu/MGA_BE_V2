@@ -53,4 +53,8 @@ public static class Message
     public readonly static String MESSAGE_MANGA_ALREADY_DELETE = "Manga has been deleted already!";
 
     #endregion
+
+    #region JSON_HELPER
+    public readonly static String MESSAGE_JSON_DESERIALIZE_FAIL = "Server fail to deserialize json data.";
+    #endregion
 }
