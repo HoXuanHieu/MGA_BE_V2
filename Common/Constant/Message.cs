@@ -21,6 +21,11 @@ public static class Message
     public readonly static String MESSAGE_USER_GET_SUCCESSFUL = "Get users data success";
     public readonly static String MESSAGE_USER_CREATE_SUCCESSFUL = "Create new user sucess";
     public readonly static String MESSAGE_USER_CREATE_FAIL = "Create new user fail";
+
+    public readonly static String MESSAGE_USER_ALREADY_VERIFY = "User has been verified!";
+    public readonly static String MESSAGE_USER_VERIFY_CODE_INCORRECT = "Verify Code is incorrect, please make sure you have check mail";
+    public readonly static String MESSAGE_USER_VERIFY_SUCCESSFUL = "User verify successful, please login again!";
+    public readonly static String MESSAGE_USER_VERITY_FAIL = "User verify fail, please try later";
     #endregion
 
     #region LOGIN

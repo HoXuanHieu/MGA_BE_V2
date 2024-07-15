@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -28,18 +28,18 @@ public class SecureService : ISecureService
         var users = await _userRepository.GetAllUsersAsync();
         var checkUserExist = users.FirstOrDefault(x => x.UserName == request.UserName);
         if (checkUserExist == null)
-            return new ApiResponse<LoginResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
+            return new ApiResponse<LoginResponse>(Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
         if (!PasswordHelper.VerifyPasswordHash(request.Password, checkUserExist.PasswordHash, checkUserExist.PasswordSalt))
-            return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_lOGIN_WRONG_PASSWORD, null, 109);
+            return new ApiResponse<LoginResponse>(Message.MESSAGE_USER_lOGIN_WRONG_PASSWORD, null, 109);
         if (!checkUserExist.IsVerify)
-            return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_LOGIN_USER_UNVERIFY, null, 406);
+            return new ApiResponse<LoginResponse>(Message.MESSAGE_USER_LOGIN_USER_UNVERIFY, null, 406);
         var response = new LoginResponse()
         {
             Token = CreateToken(checkUserExist),
             UserResponse = GetUserResponse(checkUserExist)
         };
         _logger.LogInformation($"User {checkUserExist.UserName} login successful");
-        return new ApiResponse<LoginResponse>(Common.Message.MESSAGE_USER_LOGIN_SUCCESSFUL, response, 200);
+        return new ApiResponse<LoginResponse>(Message.MESSAGE_USER_LOGIN_SUCCESSFUL, response, 200);
     }
 
     public async Task<ApiResponse<UserResponse>> RegisterAsync(UserRegisterRequest request)
@@ -63,11 +63,11 @@ public class SecureService : ISecureService
             var result = GetUserResponse(userRegister);
             if (result == null)
             {
-                return new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_REGISTER_FAIL, result, 500);
+                return new ApiResponse<UserResponse>(Message.MESSAGE_USER_REGISTER_FAIL, result, 500);
             }
             //logic return status code 
             _logger.LogInformation($"User {userRegister.UserName} register successful");
-            var apiRespone = new ApiResponse<UserResponse>(Common.Message.MESSAGE_USER_REGISTER_SUCCESSFUL, result, 200);
+            var apiRespone = new ApiResponse<UserResponse>(Message.MESSAGE_USER_REGISTER_SUCCESSFUL, result, 200);
             return apiRespone;
         }
         catch (Exception ex)
@@ -83,9 +83,9 @@ public class SecureService : ISecureService
     {
         var users = await _userRepository.GetAllUsersAsync();
         if (users.Select(x => x.UserName).Contains(request.UserName))
-            return Common.Message.VALIDATE_MESSAGE_USER_NAME_DUPLICATE;
+            return Message.VALIDATE_MESSAGE_USER_NAME_DUPLICATE;
         else if (users.Select(x => x.Email).Contains(request.Email))
-            return Common.Message.VALIDATE_MESSAGE_USER_EMAIL_DUPLICATE;
+            return Message.VALIDATE_MESSAGE_USER_EMAIL_DUPLICATE;
         return "";
     }
 
@@ -119,5 +119,46 @@ public class SecureService : ISecureService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    public async Task<ApiResponse<bool>> VerifyUserAsync(string userId, string verifyCode)
+    {
+        //check user exist
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user != null)
+        {
+            if (user.IsVerify)
+            {
+                return new ApiResponse<bool>("", false, 400);
+            }
+            else
+            {
+                //check verify code which save in coookie
+                var localOTP = "123456";
+                if (verifyCode.Equals(localOTP))
+                {
+                    user.IsVerify = true;
+                    var updateResponse = await _userRepository.UpdateUserAsync(user);
+                    if (!updateResponse.Equals(Message.MESSAGE_USER_UPDATE_SUCCESSFUL))
+                    {
+                        return new ApiResponse<bool>(Message.MESSAGE_USER_VERITY_FAIL, false, 500);
+                    }
+                    return new ApiResponse<bool>(Message.MESSAGE_USER_VERIFY_SUCCESSFUL, true, 200);
+                }
+                else
+                {
+                    return new ApiResponse<bool>(Message.MESSAGE_USER_VERIFY_CODE_INCORRECT, false, 400);
+                }
+            }
+        }
+        else
+        {
+            return new ApiResponse<bool>(Message.VALIDATE_MESSAGE_USER_NOT_EXIST, false, 400);
+        }
+
+    }
+
+    public Task<ApiResponse<bool>> SendVerifyOTP()
+    {
+        throw new NotImplementedException();
+    }
 }
 
