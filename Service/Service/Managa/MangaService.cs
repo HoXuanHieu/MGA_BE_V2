@@ -24,7 +24,14 @@ public class MangaService : IMangaService
         // convert category list to string
         if (!request.Categories.Any())
             return new ApiResponse<MangaResponse>("", null, 400);
-        var mangaEntity = new MangaEntity(request.Title, imageUrl, request.Description, "categories here", request.PostedBy);
+        var mangaEntity = new MangaEntity
+        {
+            MangaName = request.Title,
+            MangaImage = imageUrl,
+            Description = request.Description,
+            Categories = "categories here",
+            PostedBy = request.PostedBy
+        };
         var result = await _repository.CreateMangaAsync(mangaEntity);
         if (result.Equals(Common.Message.MESSAGE_MANGA_CREATE_FAIL))
             return new ApiResponse<MangaResponse>(result, null, 500);

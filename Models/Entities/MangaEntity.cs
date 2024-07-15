@@ -46,13 +46,5 @@ namespace Models.Entities
 
         public List<ChapterEntity> chapters { get; set; }
 
-        public MangaEntity(string mangaName, string mangaImage, string description, string categrories, string postBy)
-        {
-            MangaName = mangaName;
-            MangaImage = mangaImage;
-            Description = description;
-            Categories = categrories;
-            PostedBy = postBy;
-        }
     }
 }

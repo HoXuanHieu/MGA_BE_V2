@@ -17,6 +17,7 @@ namespace Repositories.Configurations
             builder.Property(x => x.MangaName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.MangaImage).IsRequired().HasMaxLength(100);
             builder.Property(x => x.DateCreated).IsRequired().HasDefaultValue(DateTime.Now);
+            builder.Property(x => x.Categories).IsRequired().HasMaxLength(255);
             builder.Property(x => x.DateUpdated).IsRequired();
             builder.Property(x => x.IsApproval).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.IsDelete).IsRequired().HasDefaultValue(false);
