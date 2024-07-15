@@ -17,6 +17,16 @@ public class UserService : IUserService
         _repository = repository;
     }
 
+    public async Task<bool> CheckUserExist(string userId)
+    {
+        var users = await _repository.GetAllUsersAsync();
+        if(users.Select(x => x.UserId).Contains(userId))
+        {
+            return true;
+        }
+        return false;
+    }
+
     public async Task<ApiResponse<UserResponse>> CreateUserAsync(CreateUserRequest request)
     {
         //String password = PasswordHelper.GeneratePassword();

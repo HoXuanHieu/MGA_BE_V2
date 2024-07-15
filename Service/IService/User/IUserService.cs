@@ -11,4 +11,5 @@ public interface IUserService
     public Task<ApiResponse<UserResponse>> UpdateUserAsync(UpdateUserRequest request);
     public Task<ApiResponse<Boolean>> DeleteUserAsync(String userId);
     public Task<ApiResponse<UserResponse>> GetUserById(String userId);
+    public Task<Boolean> CheckUserExist(String userId); 
 }
