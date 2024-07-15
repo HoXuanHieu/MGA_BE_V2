@@ -55,4 +55,11 @@ public class UserController : ControllerBase
         var response = await _userService.UpdateUserAsync(request);
         return StatusCode(response.Status, response);
     }
+
+    [HttpPost]
+    [Route("verify")]
+    public async Task<IActionResult> VerifyUserAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
