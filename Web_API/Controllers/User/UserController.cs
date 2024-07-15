@@ -6,7 +6,7 @@ using Web_API.ResponseModel;
 
 namespace Web_API;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class UserController : ControllerBase
 {
