@@ -33,4 +33,12 @@ public class SecureController : ControllerBase
         var result = await _secureService.LoginAsync(request);    
         return StatusCode(result.Status, result);
     }
+
+    [HttpPost]
+    [Route("verify")]
+    public async Task<IActionResult> VerifyUserAsync(VerifyUserRequest request)
+    {
+        var result = await _secureService.VerifyUserAsync(request.userId, request.verifyCode);
+        return StatusCode(result.Status, result);
+    }
 }

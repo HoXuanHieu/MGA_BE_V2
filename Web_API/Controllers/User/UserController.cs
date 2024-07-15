@@ -56,10 +56,4 @@ public class UserController : ControllerBase
         return StatusCode(response.Status, response);
     }
 
-    [HttpPost]
-    [Route("verify")]
-    public async Task<IActionResult> VerifyUserAsync()
-    {
-        throw new NotImplementedException();
-    }
 }
