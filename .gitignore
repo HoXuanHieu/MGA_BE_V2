@@ -225,5 +225,5 @@ AppPackages/
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
 .vs/*
-**/Migrations/*
-**/appsettings.json
+/Migrations
+*/appsettings.json
