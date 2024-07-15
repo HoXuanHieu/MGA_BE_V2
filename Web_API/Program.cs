@@ -19,6 +19,8 @@ service.AddAuthorization();
 
 #region DI Repositories
 service.AddScoped<IUserRepository, UserRepository>();
+service.AddScoped<IMangaRepository, MangaRepository>();
+service.AddScoped<IChapterService, ChapterService>();
 #endregion
 
 #region DI Services

@@ -11,29 +11,30 @@ public class MangaService : IMangaService
 {
     private readonly IMangaRepository _repository;
     private readonly ILogger<MangaService> _logger;
-    public MangaService(IMangaRepository repository, ILogger<MangaService> logger)
+    private readonly IUserService _userService;
+    public MangaService(IMangaRepository repository, ILogger<MangaService> logger, IUserService userService)
     {
         _repository = repository;
         _logger = logger;
+        _userService = userService;
     }
 
     public async Task<ApiResponse<MangaResponse>> CreateMangaAsync(CreateMangaRequest request)
     {
         // save image
         //check file extension 
-        var validExtensions = new List<string>() { ".png", ".jdg", ".mp4" };
+        var validExtensions = new List<string>() { ".png", ".jpg", ".jfif", ".jpeg" };
         if (!FileHelper.CheckValidFileExtension(validExtensions, request.MangaImage.FileName))
             return new ApiResponse<MangaResponse>("", null, 400);
         string imageUrl = await FileHelper.SaveImageAsync(Common.Path.LOCAL_IMAGE_STORAGE_PATH, request.MangaImage);
-        // convert category list to string
-        if (!request.Categories.Any())
-            return new ApiResponse<MangaResponse>("", null, 400);
         //check user post exist or not ? 
-
-        var mangaEntity = new MangaEntity { 
-           MangaName = request.Title, 
-            MangaImage = imageUrl, 
-            Description= request.Description,
+        if (! await _userService.CheckUserExist(request.PostedBy))
+            return new ApiResponse<MangaResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
+        var mangaEntity = new MangaEntity
+        {
+            MangaName = request.Title,
+            MangaImage = imageUrl,
+            Description = request.Description,
             Categories = "categories here",
             PostedBy = request.PostedBy
         };

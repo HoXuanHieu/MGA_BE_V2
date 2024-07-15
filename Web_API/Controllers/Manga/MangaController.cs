@@ -5,7 +5,7 @@ using Service;
 
 namespace Web_API.Controllers.Manga
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MangaController : ControllerBase
     {
@@ -17,21 +17,25 @@ namespace Web_API.Controllers.Manga
 
         // add pagination
         [HttpGet]
+        [Route("getall")]
         public async Task<List<MangaResponse>> getAllManga()
         {
             throw new NotImplementedException();
         }
 
-        [HttpGet("/{mangaId}")]
+        [HttpGet]
+        [Route("getbyid/{mangaId}")]
         public async Task<IActionResult> getMangaInfomationById(String mangaId)
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateManga()
+        [Route("create")]
+        public async Task<IActionResult> CreateManga(CreateMangaRequest request)
         {
-            throw new NotImplementedException();
+            var response = await _service.CreateMangaAsync(request);
+            return StatusCode(response.Status, response);
         }
     }
 }

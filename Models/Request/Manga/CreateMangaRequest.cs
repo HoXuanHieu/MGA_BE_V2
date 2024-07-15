@@ -10,7 +10,6 @@ public class CreateMangaRequest
     public string Title { get; set; }
 
     [Required]
-    [StringLength(100)]
     public IFormFile MangaImage { get; set; }
 
     [Required]

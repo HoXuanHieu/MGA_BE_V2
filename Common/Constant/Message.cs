@@ -51,7 +51,7 @@ public static class Message
     public readonly static String MESSAGE_MANGA_CREATE_SUCCESSFUL = $"Manga has been created successful at time {DateTime.UtcNow}.";
     public readonly static String MESSAGE_MANGA_CREATE_FAIL = $"Server fail to create manga {DateTime.UtcNow},";
     public readonly static String MESSAGE_MANGA_ALREADY_DELETE = "Manga has been deleted already!";
-
+    public readonly static String MESSAGE_MANGA_INVALID_FILE_EXTENSION = "Invalid manga image extension.";
     #endregion
 
     #region JSON_HELPER
