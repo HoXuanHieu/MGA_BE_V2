@@ -20,15 +20,20 @@ public class MangaService : IMangaService
     public async Task<ApiResponse<MangaResponse>> CreateMangaAsync(CreateMangaRequest request)
     {
         // save image
+        //check file extension 
+        var validExtensions = new List<string>() { ".png", ".jdg", ".mp4" };
+        if (!FileHelper.CheckValidFileExtension(validExtensions, request.MangaImage.FileName))
+            return new ApiResponse<MangaResponse>("", null, 400);
         string imageUrl = await FileHelper.SaveImageAsync(Common.Path.LOCAL_IMAGE_STORAGE_PATH, request.MangaImage);
         // convert category list to string
         if (!request.Categories.Any())
             return new ApiResponse<MangaResponse>("", null, 400);
-        var mangaEntity = new MangaEntity
-        {
-            MangaName = request.Title,
-            MangaImage = imageUrl,
-            Description = request.Description,
+        //check user post exist or not ? 
+
+        var mangaEntity = new MangaEntity { 
+           MangaName = request.Title, 
+            MangaImage = imageUrl, 
+            Description= request.Description,
             Categories = "categories here",
             PostedBy = request.PostedBy
         };

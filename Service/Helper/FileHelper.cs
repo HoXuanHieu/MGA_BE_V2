@@ -26,5 +26,19 @@ namespace Service.Helper
                 return Common.Message.MESSAGE_FILE_SAVE_FAIL + $" Error: {ex.Message}";
             }
         }
+
+        public static bool CheckValidFileExtension(List<String> validExtensions, String fileName)
+        {
+            var extension = Path.GetExtension(fileName);
+            if (extension == null)
+            {
+                return false;
+            }
+            if (validExtensions.Contains(fileName))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
