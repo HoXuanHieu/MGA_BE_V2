@@ -54,4 +54,30 @@ public class MangaService : IMangaService
         return new ApiResponse<MangaResponse>(result, response, 200);
 
     }
+
+    public async Task<ApiResponse<AllMangaResponse>> GetAllMangaAsync()
+    {
+        var mangas = await _repository.GetAllMangaAsync();
+        var result = new AllMangaResponse();
+        if (!mangas.Any())
+            return new ApiResponse<AllMangaResponse>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
+        foreach (var item in mangas)
+        {
+            var itemResponse = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), item.DateUpdated);
+            if (item.IsApproval)
+            {
+                result.mangaHasApproval.Add(itemResponse);
+            }
+            else
+            {
+                result.mangaNoApproval.Add(itemResponse);
+            }
+        }
+        return new ApiResponse<AllMangaResponse>(Common.Message.MESSAGE_USER_GET_SUCCESSFUL, result, 200);
+    }
+
+    public Task<ApiResponse<List<MangaResponse>>> GetAllMangaByUserAsync(string userId)
+    {
+        throw new NotImplementedException();
+    }
 }
