@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Service.Helper
 {
@@ -14,12 +15,13 @@ namespace Service.Helper
                 {
                     Directory.CreateDirectory(rootPath);
                 }
-                using (FileStream stream = File.Create(rootPath + fileContent.FileName))
+                var fileDirect = rootPath + "/" + fileContent.FileName;
+                using (FileStream stream = File.Create(fileDirect))
                 {
                     await fileContent.CopyToAsync(stream);
                     stream.Flush();
                 }
-                return fileContent.FileName;
+                return fileDirect;
             }
             catch (Exception ex)
             {
@@ -34,7 +36,7 @@ namespace Service.Helper
             {
                 return false;
             }
-            if (validExtensions.Contains(fileName))
+            if (validExtensions.Contains(extension))
             {
                 return true;
             }

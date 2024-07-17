@@ -28,7 +28,7 @@ public class MangaService : IMangaService
             return new ApiResponse<MangaResponse>("", null, 400);
         string imageUrl = await FileHelper.SaveImageAsync(Common.Path.LOCAL_IMAGE_STORAGE_PATH, request.MangaImage);
         //check user post exist or not ? 
-        if (! await _userService.CheckUserExist(request.PostedBy))
+        if (!await _userService.CheckUserExist(request.PostedBy))
             return new ApiResponse<MangaResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
         var mangaEntity = new MangaEntity
         {
@@ -38,23 +38,20 @@ public class MangaService : IMangaService
             Categories = "categories here",
             PostedBy = request.PostedBy
         };
+        try
+        {
+            mangaEntity.Categories = JsonHelper.Serialize<List<Categories>>(request.Categories);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Server got error when deserialize data with message: {ex.Message}");
+            return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_JSON_DESERIALIZE_FAIL, null, 500);
+        }
         var result = await _repository.CreateMangaAsync(mangaEntity);
         if (result.Equals(Common.Message.MESSAGE_MANGA_CREATE_FAIL))
             return new ApiResponse<MangaResponse>(result, null, 500);
-        else
-        {
-            List<Categories> categories = new List<Categories>();
-            try
-            {
-                categories = JsonHelper.Deserialize<List<Categories>>(mangaEntity.Categories);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Server got error when deserialize data with message: {ex.Message}");
-                return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_JSON_DESERIALIZE_FAIL, null, 500);
-            }
-            var response = new MangaResponse(mangaEntity.MangaId, mangaEntity.MangaName, mangaEntity.MangaImage, categories, mangaEntity.DateUpdated);
-            return new ApiResponse<MangaResponse>(result, response, 200);
-        }
+        var response = new MangaResponse(mangaEntity.MangaId, mangaEntity.MangaName, mangaEntity.MangaImage, request.Categories, mangaEntity.DateUpdated);
+        return new ApiResponse<MangaResponse>(result, response, 200);
+
     }
 }
