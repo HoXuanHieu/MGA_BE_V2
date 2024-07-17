@@ -49,6 +49,7 @@ service.AddScoped<IChapterService, ChapterService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -66,4 +67,10 @@ app.UseAuthorization();
 //app.MapIdentityApi<UserEntity>();
 app.MapControllers();
 
+app.UseCors(builder =>
+{
+    builder
+.AllowAnyOrigin().AllowAnyMethod()
+    .AllowAnyHeader();
+});
 app.Run();
