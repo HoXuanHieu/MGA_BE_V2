@@ -127,7 +127,7 @@ public class SecureService : ISecureService
         {
             if (user.IsVerify)
             {
-                return new ApiResponse<bool>("", false, 400);
+                return new ApiResponse<bool>(Common.Message.MESSAGE_USER_ALREADY_VERIFY, false, 400);
             }
             else
             {
