@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
+using Web_API.ResponseModel;
 
 namespace Web_API.Controllers.Manga
 {
@@ -18,21 +19,29 @@ namespace Web_API.Controllers.Manga
         // add pagination
         [HttpGet]
         [Route("getall")]
-        public async Task<List<MangaResponse>> getAllManga()
+        public async Task<IActionResult> GetAllMangaAsync()
         {
-            throw new NotImplementedException();
+            var response = await _service.GetAllMangaAsync();
+            return StatusCode(response.Status, response);
+        }
+        [HttpGet]
+        [Route("getallapprove")]
+        public async Task<IActionResult> GetAllApprovalMangaAsync()
+        {
+            var response = await _service.GetAllApproveAsync();
+            return StatusCode(response.Status, response);
         }
 
         [HttpGet]
         [Route("getbyid/{mangaId}")]
-        public async Task<IActionResult> getMangaInfomationById(String mangaId)
+        public async Task<IActionResult> GetMangaInfomationByIdAsync(String mangaId)
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateManga(CreateMangaRequest request)
+        public async Task<IActionResult> CreateMangaAsync(CreateMangaRequest request)
         {
             var response = await _service.CreateMangaAsync(request);
             return StatusCode(response.Status, response);

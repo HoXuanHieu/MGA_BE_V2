@@ -55,28 +55,58 @@ public class MangaService : IMangaService
 
     }
 
+    public async Task<ApiResponse<List<MangaResponse>>> GetAllApproveAsync()
+    {
+        var mangas = await _repository.GetAllMangaAsync();
+        var result = new List<MangaResponse>();
+        if (!mangas.Any())
+            return new ApiResponse<List<MangaResponse>> (Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
+        var mangasHasApproval = mangas.Where(x => x.IsApproval).ToList();
+        if (!mangasHasApproval.Any())
+            return new ApiResponse<List<MangaResponse>>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
+        else
+        {
+            foreach(var item in mangasHasApproval)
+            {
+                var temp = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), item.DateUpdated);
+                result.Add(temp);
+            }
+            return new ApiResponse<List<MangaResponse>>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 200);
+        }
+    }
+
     public async Task<ApiResponse<AllMangaResponse>> GetAllMangaAsync()
     {
         var mangas = await _repository.GetAllMangaAsync();
         var result = new AllMangaResponse();
         if (!mangas.Any())
             return new ApiResponse<AllMangaResponse>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
+        var mangaHasApproval = new List<MangaResponse>();
+        var mangaNoApproval = new List<MangaResponse>();
+
         foreach (var item in mangas)
         {
             var itemResponse = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), item.DateUpdated);
             if (item.IsApproval)
             {
-                result.mangaHasApproval.Add(itemResponse);
+                mangaHasApproval.Add(itemResponse);
             }
             else
             {
-                result.mangaNoApproval.Add(itemResponse);
+                mangaNoApproval.Add(itemResponse);
             }
         }
+        result.mangaNoApproval = mangaNoApproval;
+        result.mangaHasApproval = mangaHasApproval;
         return new ApiResponse<AllMangaResponse>(Common.Message.MESSAGE_USER_GET_SUCCESSFUL, result, 200);
     }
 
     public Task<ApiResponse<List<MangaResponse>>> GetAllMangaByUserAsync(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<ApiResponse<MangaResponse>> GetMangaByIdAsync(string MangaId)
     {
         throw new NotImplementedException();
     }

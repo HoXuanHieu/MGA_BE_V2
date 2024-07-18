@@ -53,7 +53,7 @@ public class MangaRepository : IMangaRepository
 
     public async Task<List<MangaEntity>> GetAllMangaAsync()
     {
-        var result = await _context.Mangas.Where(x => x.IsApproval && !x.IsDelete).ToListAsync();
+        var result = await _context.Mangas.Where(x => !x.IsDelete).ToListAsync();
         return result;
     }
 
