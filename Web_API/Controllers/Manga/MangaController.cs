@@ -46,5 +46,13 @@ namespace Web_API.Controllers.Manga
             var response = await _service.CreateMangaAsync(request);
             return StatusCode(response.Status, response);
         }
+
+        [HttpDelete]
+        [Route("delete/{mangaId}")]
+        public async Task<IActionResult> DeleteMangaAsync(String mangaId)
+        {
+            var response = await _service.DeleteMangaAsync(mangaId);
+            return StatusCode(response.Status, response);
+        }
     }
 }

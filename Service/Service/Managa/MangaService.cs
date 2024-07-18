@@ -55,6 +55,18 @@ public class MangaService : IMangaService
 
     }
 
+    public async Task<ApiResponse<bool>> DeleteMangaAsync(string mangaId)
+    {
+        var entity = await _repository.GetManagByIdAsync(mangaId);
+        if (entity == null)
+            return new ApiResponse<bool>(Common.Message.MESSAGE_MANGA_DOES_NOT_EXIST, false, 404);
+        var response = await _repository.DeleteMangaByIdAsync(mangaId);
+        if (response.Equals(Common.Message.MESSAGE_FILE_DELETE_SUCCESSFUL))
+            return new ApiResponse<bool>(response, true, 200);
+        else
+            return new ApiResponse<bool>(response, false, 500);
+    }
+
     public async Task<ApiResponse<List<MangaResponse>>> GetAllApproveAsync()
     {
         var mangas = await _repository.GetAllMangaAsync();
@@ -106,7 +118,7 @@ public class MangaService : IMangaService
         throw new NotImplementedException();
     }
 
-    public async Task<ApiResponse<MangaResponse>> GetMangaByIdAsync(string MangaId)
+    public async Task<ApiResponse<MangaResponse>> GetMangaByIdAsync(string mangaId)
     {
         throw new NotImplementedException();
     }
