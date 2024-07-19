@@ -40,11 +40,14 @@ namespace Models.Entities
 
         [Required]
         public String PostedBy { get; set; }
+        [Required]
+        public String AuthorId { get; set; }
+
 
         //relationship
-        public UserEntity user { get; set; }
-
-        public List<ChapterEntity> chapters { get; set; }
+        public AuthorEntity Author { get; set; }
+        public UserEntity User { get; set; }
+        public List<ChapterEntity> Chapters { get; set; }
 
     }
 }

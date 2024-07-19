@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Models;
 using Models.Entities;
 using Repositories.Configurations;
 
@@ -14,6 +15,7 @@ public class DatabaseContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<MangaEntity> Mangas { get; set; }
     public DbSet<ChapterEntity> Chapters { get; set; }
+    public DbSet<AuthorEntity> Authors { get; set; }
     #endregion
 
     public DatabaseContext() { }
@@ -31,5 +33,6 @@ public class DatabaseContext : DbContext
         builder.ApplyConfiguration(new UserConfiguration());
         builder.ApplyConfiguration(new MangaConfiguration());
         builder.ApplyConfiguration(new ChapterConfiguration());
+        builder.ApplyConfiguration(new AuthorConfiguration());
     }
 }
