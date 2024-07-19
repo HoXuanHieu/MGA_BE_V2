@@ -60,6 +60,15 @@ public static class Message
     public readonly static String MESSAGE_MANGA_NO_DATA = "No data for display.";
     #endregion
 
+    #region AUTHOR_MESSAGE
+
+    public readonly static String MESSAGE_AUTHOR_DOES_NOT_EXIST = "";
+    public readonly static String MESSAGE_AUTHOR_NO_DATA = "No data for display.";
+    public readonly static String MESSAGE_AUTHOR_DELETE_SUCCESSFUL = $"Author has been deleted successful at time {DateTime.UtcNow}";
+    public readonly static String MESSAGE_AUTHOR_GET_SUCCESSUL = "Get Author successful.";
+
+    #endregion
+
     #region JSON_HELPER
     public readonly static String MESSAGE_JSON_DESERIALIZE_FAIL = "Server fail to deserialize json data.";
     #endregion
