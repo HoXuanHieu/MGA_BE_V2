@@ -43,6 +43,9 @@ namespace Models.Entities
         [Required]
         public Boolean IsDelete { get; set; } = false;
 
+        public String LastActivity { get; set; } = "";
+
+
         //------------------
         public List<MangaEntity> MangaPost { get; set; }
     }

@@ -38,6 +38,8 @@ namespace Models.Entities
 
         public Boolean IsDelete { get; set; } = false;
 
+        public String LastActivity { get; set; } = "";
+
         [Required]
         public String PostedBy { get; set; }
         [Required]

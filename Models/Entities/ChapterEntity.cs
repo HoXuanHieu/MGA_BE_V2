@@ -22,5 +22,7 @@ namespace Models.Entities
         public String MangaId { get; set; }
 
         public MangaEntity manga { get; set; }
+
+        public String LastActivity { get; set; } = "";
     }
 }
