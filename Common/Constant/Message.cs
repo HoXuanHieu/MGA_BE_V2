@@ -62,7 +62,7 @@ public static class Message
 
     #region AUTHOR_MESSAGE
 
-    public readonly static String MESSAGE_AUTHOR_DOES_NOT_EXIST = "";
+    public readonly static String MESSAGE_AUTHOR_DOES_NOT_EXIST = "Author does not existed, please try double check it.";
     public readonly static String MESSAGE_AUTHOR_NO_DATA = "No data for display.";
     public readonly static String MESSAGE_AUTHOR_DELETE_SUCCESSFUL = $"Author has been deleted successful at time {DateTime.UtcNow}";
     public readonly static String MESSAGE_AUTHOR_GET_SUCCESSUL = "Get Author successful.";

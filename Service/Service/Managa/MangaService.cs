@@ -12,11 +12,13 @@ public class MangaService : IMangaService
     private readonly IMangaRepository _repository;
     private readonly ILogger<MangaService> _logger;
     private readonly IUserService _userService;
-    public MangaService(IMangaRepository repository, ILogger<MangaService> logger, IUserService userService)
+    private readonly IAuthorService _authoService;
+    public MangaService(IMangaRepository repository, ILogger<MangaService> logger, IUserService userService, IAuthorService authoService)
     {
         _repository = repository;
         _logger = logger;
         _userService = userService;
+        _authoService = authoService;
     }
 
     public async Task<ApiResponse<MangaResponse>> CreateMangaAsync(CreateMangaRequest request)
@@ -30,6 +32,9 @@ public class MangaService : IMangaService
         //check user post exist or not ? 
         if (!await _userService.CheckUserExist(request.PostedBy))
             return new ApiResponse<MangaResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
+        var author = await _authoService.GetAuthorByIdAsync(request.AuthorId);
+        if (author == null)
+            return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_AUTHOR_DOES_NOT_EXIST, null, 400);
         var mangaEntity = new MangaEntity
         {
             MangaName = request.Title,
@@ -50,7 +55,7 @@ public class MangaService : IMangaService
         var result = await _repository.CreateMangaAsync(mangaEntity);
         if (result.Equals(Common.Message.MESSAGE_MANGA_CREATE_FAIL))
             return new ApiResponse<MangaResponse>(result, null, 500);
-        var response = new MangaResponse(mangaEntity.MangaId, mangaEntity.MangaName, mangaEntity.MangaImage, request.Categories, mangaEntity.DateUpdated);
+        var response = new MangaResponse(mangaEntity.MangaId, mangaEntity.MangaName, mangaEntity.MangaImage, request.Categories, author.Content.AuthorId, author.Content.AuthorName, mangaEntity.DateUpdated);
         return new ApiResponse<MangaResponse>(result, response, 200);
 
     }
@@ -72,15 +77,16 @@ public class MangaService : IMangaService
         var mangas = await _repository.GetAllMangaAsync();
         var result = new List<MangaResponse>();
         if (!mangas.Any())
-            return new ApiResponse<List<MangaResponse>> (Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
+            return new ApiResponse<List<MangaResponse>>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
         var mangasHasApproval = mangas.Where(x => x.IsApproval).ToList();
         if (!mangasHasApproval.Any())
             return new ApiResponse<List<MangaResponse>>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 203);
         else
         {
-            foreach(var item in mangasHasApproval)
+            foreach (var item in mangasHasApproval)
             {
-                var temp = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), item.DateUpdated);
+                var author = await _authoService.GetAuthorByIdAsync(item.AuthorId);
+                var temp = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), author.Content.AuthorId, author.Content.AuthorName, item.DateUpdated);
                 result.Add(temp);
             }
             return new ApiResponse<List<MangaResponse>>(Common.Message.MESSAGE_MANGA_NO_DATA, result, 200);
@@ -98,7 +104,8 @@ public class MangaService : IMangaService
 
         foreach (var item in mangas)
         {
-            var itemResponse = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), item.DateUpdated);
+            var author = await _authoService.GetAuthorByIdAsync(item.AuthorId);
+            var itemResponse = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), author.Content.AuthorId, author.Content.AuthorName, item.DateUpdated);
             if (item.IsApproval)
             {
                 mangaHasApproval.Add(itemResponse);

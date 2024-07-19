@@ -20,7 +20,7 @@ public class CreateMangaRequest
     public List<Categories> Categories { get; set; }
 
     [Required]
-    public String AuthorID { get; set; }
+    public String AuthorId { get; set; }
 
     [Required]
     public String PostedBy { get; set; }

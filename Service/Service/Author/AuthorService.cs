@@ -51,6 +51,6 @@ public class AuthorService : IAuthorService
             DateUpdate = data.DateUpdate,
             Description = data.Description
         };
-        return new ApiResponse<AuthorResponse>(Message.MESSAGE_AUTHOR_GET_SUCCESSUL, result, 200);
+        return new ApiResponse<AuthorResponse>(Message.MESSAGE_AUTHOR_GET_SUCCESSUL, result, 200); 
     }
 }
