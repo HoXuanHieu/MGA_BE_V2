@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 
@@ -14,14 +15,39 @@ public class AuthorRepository : IAuthorRepository
         _logger = logger;
     }
 
-    public Task<AuthorEntity> CreateAuthorAsync(AuthorEntity author)
+    public async Task<AuthorEntity> CreateAuthorAsync(AuthorEntity author)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await _context.Authors.AddAsync(author);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Create author successful.");
+            return result.Entity;
+        }catch (Exception ex)
+        {
+            _logger.LogError($"Can not create author with error: {ex.Message}.");
+            return null;
+        }
     }
 
-    public Task<string> DeleteAuthorAsync(string AuthorId)
+    public async Task<string> DeleteAuthorAsync(string AuthorId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _logger.LogInformation($"Create author successful.");
+            var author = await GetAuthorByIdAsync(AuthorId);
+            if (author == null)
+                return Message.MESSAGE_AUTHOR_DOES_NOT_EXIST;
+            author.IsDeleted = true;
+            _context.Update(author);
+            await _context.SaveChangesAsync();
+            return Message.MESSAGE_AUTHOR_DELETE_SUCCESSFUL;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Can not delete author with error: {ex.Message}.");
+            return Message.MESSAGE_AUTHOR_DELETE_FAIL;
+        }
     }
 
     public async Task<List<AuthorEntity>> GetAllAuthorAsync()

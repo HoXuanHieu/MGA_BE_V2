@@ -3,7 +3,7 @@
     public class ApiResponse<T>
     {
         public string Message { get; set; }
-        public T Content { get; set; }
+        public T? Content { get; set; }
         public int Status { get; set; }
 
         public ApiResponse(string message, T content, int status)
