@@ -41,7 +41,8 @@ public class MangaService : IMangaService
             MangaImage = imageUrl,
             Description = request.Description,
             Categories = "categories here",
-            PostedBy = request.PostedBy
+            PostedBy = request.PostedBy,
+            LastActivity = "Create Manga"           
         };
         try
         {
