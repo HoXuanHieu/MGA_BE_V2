@@ -21,9 +21,11 @@ service.AddAuthorization();
 service.AddScoped<IUserRepository, UserRepository>();
 service.AddScoped<IMangaRepository, MangaRepository>();
 service.AddScoped<IChapterService, ChapterService>();
+service.AddScoped<IAuthorRepository, AuthorRepository>();
 #endregion
 
 #region DI Services
+service.AddScoped<IAuthorService, AuthorService>();
 service.AddScoped<IUserService, UserService>();
 service.AddScoped<ISecureService, SecureService>();
 service.AddScoped<IMangaService, MangaService>();
