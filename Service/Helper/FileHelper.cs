@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Service.Helper
@@ -42,5 +43,24 @@ namespace Service.Helper
             }
             return false;
         }
+
+        //delete file in local directory by file path, then return boolean 
+        public static string DeleteFile(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    return Message.MESSAGE_FILE_DELETE_SUCCESSFUL;
+                }
+                return Message.MESSAGE_FILE_NOT_FOUND;
+            }
+            catch (Exception ex)
+            {
+                return Common.Message.MESSAGE_USER_DELETE_FAIL + $" Error: {ex.Message}";
+            }
+        }
+        
     }
 }
