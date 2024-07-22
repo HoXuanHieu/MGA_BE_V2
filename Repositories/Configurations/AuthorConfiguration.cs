@@ -8,9 +8,12 @@ namespace Repositories.Configurations
     {
         public void Configure(EntityTypeBuilder<AuthorEntity> builder)
         {
-            builder.Property(x => x.AuthorId);
+            builder.HasKey(x => x.AuthorId);
             builder.Property(x => x.AuthorName).IsRequired().HasMaxLength(70);
             builder.Property(x => x.Description).HasDefaultValue("description");
+            builder.Property(x => x.DateCreate).IsRequired().HasDefaultValue(DateTime.Now);
+            builder.Property(x => x.DateUpdate).IsRequired();
+            builder.Property(x => x.LastActivity).HasDefaultValue("");
         }
     }
 }

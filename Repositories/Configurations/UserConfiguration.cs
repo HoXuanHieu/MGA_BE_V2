@@ -13,6 +13,7 @@ namespace Repositories.Configurations
     {
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
+            builder.HasKey(x => x.UserId);
             builder.Property(x => x.UserName).HasMaxLength(100).IsRequired();
             builder.Property(x => x.PasswordHash).IsRequired();
             builder.Property(x => x.PasswordSalt).IsRequired();
@@ -22,6 +23,7 @@ namespace Repositories.Configurations
             builder.Property(x => x.IsDelete).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.IsSuspension).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.IsVerify).IsRequired().HasDefaultValue(false);
+            builder.Property(x => x.LastActivity).HasDefaultValue("");
         }
     }
 }

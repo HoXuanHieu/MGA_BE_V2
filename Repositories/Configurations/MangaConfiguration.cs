@@ -21,6 +21,7 @@ namespace Repositories.Configurations
             builder.Property(x => x.DateUpdated).IsRequired();
             builder.Property(x => x.IsApproval).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.IsDelete).IsRequired().HasDefaultValue(false);
+            builder.Property(x => x.LastActivity).HasDefaultValue("");
             builder.HasOne(x => x.User).WithMany(x => x.MangaPost).HasForeignKey(x => x.PostedBy);
             builder.HasOne(x => x.Author).WithMany(x => x.Mangas).HasForeignKey(x => x.AuthorId); 
         }
