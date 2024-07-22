@@ -11,4 +11,5 @@ public interface IMangaService
     Task<ApiResponse<List<MangaResponse>>> GetAllMangaByUserAsync(String userId);
     Task<ApiResponse<MangaResponse>> GetMangaByIdAsync(String mangaId);
     Task<ApiResponse<Boolean>> DeleteMangaAsync(String mangaId);
+    Task<ApiResponse<MangaResponse>> UpdateMangaAsync(UpdateMangaRequest request);
 }

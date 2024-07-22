@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Common;
+using Microsoft.Extensions.Logging;
 using Models;
 using Models.Entities;
 using Repositories;
@@ -42,7 +43,7 @@ public class MangaService : IMangaService
             Description = request.Description,
             Categories = "categories here",
             PostedBy = request.PostedBy,
-            LastActivity = "Create Manga"           
+            LastActivity = "Create Manga"
         };
         try
         {
@@ -128,6 +129,29 @@ public class MangaService : IMangaService
 
     public async Task<ApiResponse<MangaResponse>> GetMangaByIdAsync(string mangaId)
     {
+        var result = await _repository.GetManagByIdAsync(mangaId);
+        if (result == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_DOES_NOT_EXIST, null, 404);
+        }
+        var categories = JsonHelper.Deserialize<List<Categories>>(result.Categories);
+        var author = await _authoService.GetAuthorByIdAsync(result.AuthorId);
+        var mangaResponse = new MangaResponse(
+            mangaId,
+            result.MangaName,
+            result.MangaImage,
+            categories,
+            author.Content == null ? "" : author.Content.AuthorId,
+            author.Content == null ? "" : author.Content.AuthorName,
+            result.DateUpdated);
+        return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_GET_SUCCESSFUL, mangaResponse, 200);
+    }
+
+    public Task<ApiResponse<MangaResponse>> UpdateMangaAsync(UpdateMangaRequest request)
+    {
+        // check change image or not ? 
+        // check author Id ? 
+        // 
         throw new NotImplementedException();
     }
 }

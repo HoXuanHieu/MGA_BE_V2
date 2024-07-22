@@ -40,6 +40,7 @@ public class MangaRepository : IMangaRepository
         {
             result.IsDelete = true;
             result.LastActivity = "Delete Manga";
+            result.DateUpdated = DateTime.Now;
             _context.Update(result);
             await _context.SaveChangesAsync();
             _logger.LogInformation($"Create manga successful.");
@@ -66,7 +67,7 @@ public class MangaRepository : IMangaRepository
 
     public async Task<MangaEntity> UpdateMangaAsync(MangaEntity entity)
     {
-        entity.LastActivity = "Update Manga";
+        entity.DateUpdated = DateTime.Now;
         var result = _context.Mangas.Update(entity);
         await _context.SaveChangesAsync();
         return result.Entity;

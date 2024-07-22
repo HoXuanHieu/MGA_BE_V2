@@ -36,7 +36,8 @@ namespace Web_API.Controllers.Manga
         [Route("getbyid/{mangaId}")]
         public async Task<IActionResult> GetMangaInfomationByIdAsync(String mangaId)
         {
-            throw new NotImplementedException();
+            var result = await _service.GetMangaByIdAsync(mangaId);
+            return StatusCode(result.Status, result);
         }
 
         [HttpPost]
@@ -53,6 +54,13 @@ namespace Web_API.Controllers.Manga
         {
             var response = await _service.DeleteMangaAsync(mangaId);
             return StatusCode(response.Status, response);
+        }
+
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateMangaAsync(UpdateMangaRequest request)
+        {
+            throw new NotSupportedException();
         }
     }
 }
