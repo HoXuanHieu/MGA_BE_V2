@@ -48,7 +48,7 @@ public class MangaRepository : IMangaRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Delete manga fail with message: {ex.Message}");
+            _logger.LogError($"Delete manga fail with message: {ex.Message}.");
             return Common.Message.MESSAGE_MANGA_DELETE_FAIL;
         }
     }
@@ -67,9 +67,19 @@ public class MangaRepository : IMangaRepository
 
     public async Task<MangaEntity> UpdateMangaAsync(MangaEntity entity)
     {
-        entity.DateUpdated = DateTime.Now;
-        var result = _context.Mangas.Update(entity);
-        await _context.SaveChangesAsync();
-        return result.Entity;
+        try
+        {
+            entity.DateUpdated = DateTime.Now;
+            var result = _context.Mangas.Update(entity);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Update manga successful.");
+            return result.Entity;
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError($"update manga fail with message: {ex.Message}.");
+            return null;
+        }
+
     }
 }
