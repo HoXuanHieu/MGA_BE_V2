@@ -60,7 +60,16 @@ namespace Web_API.Controllers.Manga
         [Route("update")]
         public async Task<IActionResult> UpdateMangaAsync(UpdateMangaRequest request)
         {
-            throw new NotSupportedException();
+            var response = await _service.UpdateMangaAsync(request);
+            return StatusCode(response.Status, response);
+        }
+
+        [HttpPut]
+        [Route("approve")]
+        public async Task<IActionResult> ApproveMangaAsync(String mangaId, String modifiedBy)
+        {
+            var response = await _service.ApproveMangaAsync(mangaId, modifiedBy);
+            return StatusCode(response.Status, response);
         }
     }
 }

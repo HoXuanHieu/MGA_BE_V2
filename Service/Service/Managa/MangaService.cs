@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Azure.Core;
+using Common;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Entities;
@@ -20,6 +21,30 @@ public class MangaService : IMangaService
         _logger = logger;
         _userService = userService;
         _authoService = authoService;
+    }
+
+    public async Task<ApiResponse<MangaResponse>> ApproveMangaAsync(string mangaId, string modifiedBy)
+    {
+        var databaseItem = await _repository.GetManagByIdAsync(mangaId);
+        if (databaseItem == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_DOES_NOT_EXIST, null, 404);
+        }
+        var author = await _authoService.GetAuthorByIdAsync(databaseItem.AuthorId);
+        if (author.Content == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_AUTHOR_DOES_NOT_EXIST, null, 404);
+        }
+        databaseItem.IsApproval = true;
+        databaseItem.LastActivity = $"Manga has been approved by user id : {modifiedBy}";
+        databaseItem.DateUpdated = DateTime.Now;
+        var result = await _repository.UpdateMangaAsync(databaseItem);
+        if (result == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_UPDATE_FAIL, null, 500);
+        }
+        var mangaResponse = new MangaResponse(result.MangaId, result.MangaName, result.MangaImage, JsonHelper.Deserialize<List<Categories>>(databaseItem.Categories), author.Content.AuthorId, author.Content.AuthorName, result.DateUpdated);
+        return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_UPDATE_SUCCESSFUL, mangaResponse, 200);
     }
 
     public async Task<ApiResponse<MangaResponse>> CreateMangaAsync(CreateMangaRequest request)
