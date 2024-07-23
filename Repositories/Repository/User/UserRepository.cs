@@ -21,13 +21,13 @@ public class UserRepository : IUserRepository
         try
         {
             var userCreate = await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation($"Save user (user name: {user.UserName}) into database successful");
-                return Common.Message.MESSAGE_USER_CREATE_SUCCESSFUL;
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Save user (user name: {user.UserName}) into database successful");
+            return Common.Message.MESSAGE_USER_CREATE_SUCCESSFUL;
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Server got error when save user (user name: {user.UserName}) into database: {ex.Message}"); 
+            _logger.LogError($"Server got error when save user (user name: {user.UserName}) into database: {ex.Message}");
             return Common.Message.MESSAGE_USER_CREATE_FAIL;
         }
     }
@@ -75,7 +75,7 @@ public class UserRepository : IUserRepository
         try
         {
             _context.Users.Update(userUpdate);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             _logger.LogInformation($"Update user (user name: {userUpdate.UserName}) successful");
             return Common.Message.MESSAGE_USER_UPDATE_SUCCESSFUL;
         }

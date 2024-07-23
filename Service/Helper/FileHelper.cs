@@ -32,7 +32,7 @@ namespace Service.Helper
 
         public static bool CheckValidFileExtension(List<String> validExtensions, String fileName)
         {
-            var extension = Path.GetExtension(fileName);
+            var extension = System.IO.Path.GetExtension(fileName);
             if (extension == null)
             {
                 return false;
