@@ -147,6 +147,26 @@ public class MangaService : IMangaService
         return new ApiResponse<AllMangaResponse>(Common.Message.MESSAGE_USER_GET_SUCCESSFUL, result, 200);
     }
 
+    public async Task<ApiResponse<MangaResponse>> GetAllMangaByAuthorAsync(string authorId)
+    {
+        var author = await _authoService.GetAuthorByIdAsync(authorId);
+        if (author.Content == null)
+            return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_AUTHOR_DOES_NOT_EXIST, null, 404);
+        var mangas = await _repository.GetAllMangaAsync();
+        var result = new List<MangaResponse>();
+        foreach (var item in mangas)
+        {
+            if (item.AuthorId.Equals(authorId))
+            {
+                var temp = new MangaResponse(item.MangaId, item.MangaName, item.MangaImage, JsonHelper.Deserialize<List<Categories>>(item.Categories), author.Content.AuthorId, author.Content.AuthorName, item.DateUpdated);
+                result.Add(temp);
+            }
+        }
+        if (!result.Any())
+            return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_MANGA_NO_DATA, null, 203);
+        return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_MANGA_GET_SUCCESSFUL, result.FirstOrDefault(), 200);
+    }
+
     public async Task<ApiResponse<List<MangaResponse>>> GetAllMangaByUserAsync(string userId)
     {
         var user = await _userService.GetUserById(userId);
