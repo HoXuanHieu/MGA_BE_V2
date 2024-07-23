@@ -43,7 +43,7 @@ public class MangaService : IMangaService
             Description = request.Description,
             Categories = "categories here",
             PostedBy = request.PostedBy,
-            LastActivity = "Create Manga"
+            LastActivity = $"Create Manga by {request.PostedBy}"
         };
         try
         {
@@ -147,11 +147,66 @@ public class MangaService : IMangaService
         return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_GET_SUCCESSFUL, mangaResponse, 200);
     }
 
-    public Task<ApiResponse<MangaResponse>> UpdateMangaAsync(UpdateMangaRequest request)
+    public async Task<ApiResponse<MangaResponse>> UpdateMangaAsync(UpdateMangaRequest request)
     {
-        // check change image or not ? 
+        var databaseItem = await _repository.GetManagByIdAsync(request.MangaId);
+        if (databaseItem == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_DOES_NOT_EXIST, null, 404);
+        }
+        var mangaEntity = new MangaEntity()
+        {
+            MangaId = request.MangaId
+        };
         // check author Id ? 
-        // 
-        throw new NotImplementedException();
+        var author = await _authoService.GetAuthorByIdAsync(request.AuthorId);
+        if (author.Content == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_AUTHOR_DOES_NOT_EXIST, null, 404);
+        }
+        // check change image or not ? 
+        if (!request.MangaImage.Equals(databaseItem.MangaImage))
+        {
+            //detele old file and create a new one
+            var deleteFileResult = FileHelper.DeleteFile(databaseItem.MangaImage);
+            if (deleteFileResult.Equals(Message.MESSAGE_AUTHOR_DELETE_SUCCESSFUL))
+            {
+                var validExtensions = new List<string>() { ".png", ".jpg", ".jfif", ".jpeg" };
+                if (!FileHelper.CheckValidFileExtension(validExtensions, request.MangaImage.FileName))
+                    return new ApiResponse<MangaResponse>("", null, 400);
+                mangaEntity.MangaImage = await FileHelper.SaveImageAsync(Common.Path.LOCAL_IMAGE_STORAGE_PATH, request.MangaImage);
+                _logger.LogInformation(Message.MESSAGE_FILE_SAVE_SUCCESSFUL + $"Path: {mangaEntity.MangaImage}");
+            }
+            else
+            {
+                _logger.LogError(deleteFileResult);
+                return new ApiResponse<MangaResponse>(Message.MESSAGE_FILE_SAVE_FAIL, null, 500);
+            }
+        }
+        try
+        {
+            mangaEntity.Categories = JsonHelper.Serialize<List<Categories>>(request.Categories);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Server got error when deserialize data with message: {ex.Message}");
+            return new ApiResponse<MangaResponse>(Common.Message.MESSAGE_JSON_DESERIALIZE_FAIL, null, 500);
+        }
+        mangaEntity.MangaName = request.Title;
+        mangaEntity.Description = request.Description;
+        mangaEntity.DateCreated = databaseItem.DateCreated;
+        mangaEntity.DateUpdated = DateTime.Now;
+        mangaEntity.IsApproval = databaseItem.IsApproval;
+        mangaEntity.IsDelete = databaseItem.IsDelete;
+        mangaEntity.PostedBy = databaseItem.PostedBy;
+        mangaEntity.AuthorId = author.Content.AuthorId;
+        mangaEntity.LastActivity = $"Update Manga information by user id: {request.ModifiedBy}"; 
+        var result = await _repository.UpdateMangaAsync(mangaEntity);
+        if (result == null)
+        {
+            return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_UPDATE_FAIL, null, 500);
+        }
+        var mangaResponse = new MangaResponse(result.MangaId, result.MangaName, result.MangaImage, request.Categories, author.Content.AuthorId, author.Content.AuthorName, result.DateUpdated);
+        return new ApiResponse<MangaResponse>(Message.MESSAGE_MANGA_UPDATE_SUCCESSFUL, mangaResponse, 200);
     }
 }

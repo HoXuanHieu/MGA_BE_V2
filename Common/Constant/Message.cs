@@ -59,6 +59,9 @@ public static class Message
     public readonly static String MESSAGE_MANGA_INVALID_FILE_EXTENSION = "Invalid manga image extension.";
     public readonly static String MESSAGE_MANGA_NO_DATA = "No data for display.";
     public readonly static String MESSAGE_MANGA_GET_SUCCESSFUL = "Get Manga successful.";
+    public readonly static String MESSAGE_MANGA_UPDATE_SUCCESSFUL = "Manga has been updated successful.";
+    public readonly static String MESSAGE_MANGA_UPDATE_FAIL = "Manga has been updated fail.";
+
     #endregion
 
     #region AUTHOR_MESSAGE
