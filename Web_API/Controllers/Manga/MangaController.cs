@@ -71,5 +71,14 @@ namespace Web_API.Controllers.Manga
             var response = await _service.ApproveMangaAsync(mangaId, modifiedBy);
             return StatusCode(response.Status, response);
         }
+
+        [HttpGet]
+        [Route("getbyposter/{userId}")]
+        public async Task<IActionResult> GetMangaByPosterAsync(String userId)
+        {
+            var response = await _service.GetAllMangaByUserAsync(userId);
+            return StatusCode(response.Status, response);
+        }
+
     }
 }
