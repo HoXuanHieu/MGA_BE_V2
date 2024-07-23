@@ -80,5 +80,12 @@ namespace Web_API.Controllers.Manga
             return StatusCode(response.Status, response);
         }
 
+        [HttpGet]
+        [Route("getbyauthor/{authorId}")]
+        public async Task<IActionResult> GetMangaByAuthorAsync(String authorId)
+        {
+            var response = await _service.GetAllMangaByAuthorAsync(authorId);
+            return StatusCode(response.Status, response);
+        }
     }
 }
