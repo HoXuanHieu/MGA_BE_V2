@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Response;
 using Service;
@@ -18,6 +19,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("getall")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetUsersAsync()
     {
         var result = await _userService.GetAllUserAsync();
@@ -26,6 +28,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("create")]
+    [Authorize(Roles = "admin")]
     public async Task<ActionResult<ApiResponse<UserResponse>>> CreateUserAsync(CreateUserRequest request)
     {
         var response = await _userService.CreateUserAsync(request);
@@ -34,6 +37,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("getbyid/{userId}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> GetUserByIdAsync(String userId)
     {
         var response = await _userService.GetUserById(userId);
@@ -42,6 +46,7 @@ public class UserController : ControllerBase
 
     [HttpDelete]
     [Route("delete/{userId}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> DeleteUserAsync(String userId)
     {
         var response = await _userService.DeleteUserAsync(userId);
@@ -50,6 +55,7 @@ public class UserController : ControllerBase
 
     [HttpPut]
     [Route("update")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> UpdateUserAsync(UpdateUserRequest request)
     {
         var response = await _userService.UpdateUserAsync(request);
