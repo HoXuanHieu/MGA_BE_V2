@@ -44,6 +44,8 @@ service.AddScoped<IUserRepository, UserRepository>();
 service.AddScoped<IMangaRepository, MangaRepository>();
 service.AddScoped<IChapterService, ChapterService>();
 service.AddScoped<IAuthorRepository, AuthorRepository>();
+service.AddScoped<IChapterRepository, ChapterRepository>();
+service.AddScoped<IChapterImageRepository, ChapterImageRepository>();
 #endregion
 
 #region DI Services
