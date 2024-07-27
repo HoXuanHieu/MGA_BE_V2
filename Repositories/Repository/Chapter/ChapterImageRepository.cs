@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 
@@ -15,9 +16,27 @@ public class ChapterImageRepository : IChapterImageRepository
         _logger = logger;
     }
 
-    public Task<List<ChapterImageEntity>> CreateImageAsync(List<ChapterImageEntity> dataList)
+    public async Task<List<ChapterImageEntity>> CreateImageAsync(List<ChapterImageEntity> dataList)
     {
-        throw new NotImplementedException();
+        var result = new List<ChapterImageEntity>();
+        try
+        {
+            foreach (var item in dataList)
+            {
+                var createdItem = await _context.ChapterImages.AddAsync(item);
+                result.Add(createdItem.Entity);
+            }
+            await _context.SaveChangesAsync();
+            return result;
+        }
+        catch (Exception ex)
+        {
+            var message = $"Create Chapter image fail, throw with exception: {ex.Message}";
+            _logger.LogError(message);
+           throw new Exception(Message.MESSAGE_CHAPTER_CREATE_SUCCESSFUL);
+        }
+
+
     }
 
     public async Task<String> DeleteImageByChapterId(string chapterId)
@@ -25,19 +44,19 @@ public class ChapterImageRepository : IChapterImageRepository
         var data = await _context.ChapterImages.Where(x => x.ChapterId == chapterId).ToListAsync();
         if(data == null)
         {
-            return "";
+            return Message.MESSAGE_CHAPTER_DOES_NOT_HAVE_IMAGES;
         }
         else {
             try
             {
                 _context.ChapterImages.RemoveRange(data);
                 await _context.SaveChangesAsync();
-                return "";
+                return Message.MESSAGE_CHAPTER_IMAGE_DELETE_SUCCESSFUL;
             }
             catch(Exception ex)
             {
                 _logger.LogError($"Delete Chapter image fail, throw with exception: {ex.Message}");
-                return "";
+                return Message.MESSAGE_CHAPTER_IMAGE_DELETE_FAIL;
             }
        
         }

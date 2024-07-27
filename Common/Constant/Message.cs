@@ -85,6 +85,9 @@ public static class Message
     public static String MESSAGE_CHAPTER_NO_DATA = "No data for display.";
     public static String MESSAGE_CHAPTER_GET_SUCCESSFUL = "Get Chapter successful.";
     public static String MESSAGE_CHAPTER_UPDATE_SUCCESSFUL = "Chapter has been updated successful.";
+    public static String MESSAGE_CHAPTER_DOES_NOT_HAVE_IMAGES = "Chapter does not have any images.";
+    public static String MESSAGE_CHAPTER_IMAGE_DELETE_SUCCESSFUL = "Chapter image has been deleted successful.";
+    public static String MESSAGE_CHAPTER_IMAGE_DELETE_FAIL = "Server fail to delete chapter image.";
     #endregion
 
     #region JSON_HELPER
