@@ -76,6 +76,17 @@ public static class Message
 
     #endregion
 
+    #region CHAPTER_MESSAGE
+    public static String MESSAGE_CHAPTER_DOES_NOT_EXIST = "Chapter does not exist, please try double check it.";
+    public static String MESSAGE_CHAPTER_DELETE_SUCCESSFUL = $"Chapter has been deleted successful at time {DateTime.UtcNow}.";
+    public static String MESSAGE_CHAPTER_DELETE_FAIL = $"Server fail to delete chapter at time {DateTime.UtcNow}.";
+    public static String MESSAGE_CHAPTER_CREATE_SUCCESSFUL = $"Chapter has been created successful at time {DateTime.UtcNow}.";
+    public static String MESSAGE_CHAPTER_CREATE_FAIL = $"Server fail to create chapter at time {DateTime.UtcNow}.";
+    public static String MESSAGE_CHAPTER_NO_DATA = "No data for display.";
+    public static String MESSAGE_CHAPTER_GET_SUCCESSFUL = "Get Chapter successful.";
+    public static String MESSAGE_CHAPTER_UPDATE_SUCCESSFUL = "Chapter has been updated successful.";
+    #endregion
+
     #region JSON_HELPER
     public readonly static String MESSAGE_JSON_DESERIALIZE_FAIL = "Server fail to deserialize json data.";
     #endregion
