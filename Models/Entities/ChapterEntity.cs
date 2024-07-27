@@ -14,15 +14,14 @@ namespace Models.Entities
 
         [Required]
         public DateTime DateCreated { get; set; } = DateTime.Now;
-
-        [Required]
-        public String ChapterImage { get; set; }
+        public String LastActivity { get; set; } = "";
 
         [Required]
         public String MangaId { get; set; }
 
         public MangaEntity manga { get; set; }
 
-        public String LastActivity { get; set; } = "";
+        public List<ChapterImangeEntity> ChapterImage { get; set; }
+
     }
 }

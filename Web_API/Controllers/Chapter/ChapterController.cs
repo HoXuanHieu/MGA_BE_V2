@@ -6,6 +6,6 @@ namespace Web_API.Controllers.Chapter
     [Route("api/[controller]")]
     [ApiController]
     public class ChapterController : ControllerBase
-    {
+    { 
     }
 }
