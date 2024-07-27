@@ -5,9 +5,9 @@ using Models.Entities;
 
 namespace Repositories.Configurations
 {
-    public class ChapterImageConfiguration : IEntityTypeConfiguration<ChapterImangeEntity>
+    public class ChapterImageConfiguration : IEntityTypeConfiguration<ChapterImageEntity>
     {
-        public void Configure(EntityTypeBuilder<ChapterImangeEntity> builder)
+        public void Configure(EntityTypeBuilder<ChapterImageEntity> builder)
         {
             builder.HasKey(x => x.ChapterImageId);
             builder.Property(x => x.LastActivity).HasDefaultValue("");

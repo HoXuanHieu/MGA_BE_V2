@@ -16,6 +16,7 @@ public class DatabaseContext : DbContext
     public DbSet<MangaEntity> Mangas { get; set; }
     public DbSet<ChapterEntity> Chapters { get; set; }
     public DbSet<AuthorEntity> Authors { get; set; }
+    public DbSet<ChapterImageEntity> ChapterImages { get; set; }
     #endregion
 
     public DatabaseContext() { }
@@ -34,5 +35,6 @@ public class DatabaseContext : DbContext
         builder.ApplyConfiguration(new MangaConfiguration());
         builder.ApplyConfiguration(new ChapterConfiguration());
         builder.ApplyConfiguration(new AuthorConfiguration());
+        builder.ApplyConfiguration(new ChapterImageConfiguration());
     }
 }

@@ -21,7 +21,7 @@ namespace Models.Entities
 
         public MangaEntity manga { get; set; }
 
-        public List<ChapterImangeEntity> ChapterImage { get; set; }
+        public List<ChapterImageEntity> ChapterImage { get; set; }
 
     }
 }
