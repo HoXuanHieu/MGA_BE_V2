@@ -59,9 +59,17 @@ public class ChapterImageService : IChapterImageService
         return result;
     }
 
-    public Task<string> DeleteChapterImagesByChapterIdAsync(string chapterId)
+    public async Task<string> DeleteChapterImagesByChapterIdAsync(string chapterId)
     {
-        throw new NotImplementedException();
+        var result= await _chapterImageRepository.DeleteImageByChapterId(chapterId);
+        if (result != Common.Message.MESSAGE_CHAPTER_IMAGE_DELETE_SUCCESSFUL)
+        {
+            throw new Exception(result);
+        }
+        else
+        {
+            return result;
+        }
     }
 
     public Task<List<ChapterImageResponse>> GetChapterImagesByChapterIdAsync(string chapterId)
