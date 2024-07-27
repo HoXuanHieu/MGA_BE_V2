@@ -26,7 +26,7 @@ namespace Service.Helper
             }
             catch (Exception ex)
             {
-                return Common.Message.MESSAGE_FILE_SAVE_FAIL + $" Error: {ex.Message}";
+                throw new Exception(Common.Message.MESSAGE_FILE_SAVE_FAIL + $" Error: {ex.Message}");
             }
         }
 
