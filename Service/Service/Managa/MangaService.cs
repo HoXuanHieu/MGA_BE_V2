@@ -54,7 +54,7 @@ public class MangaService : IMangaService
         var validExtensions = new List<string>() { ".png", ".jpg", ".jfif", ".jpeg" };
         if (!FileHelper.CheckValidFileExtension(validExtensions, request.MangaImage.FileName))
             return new ApiResponse<MangaResponse>("", null, 400);
-        string imageUrl = await FileHelper.SaveImageAsync(Common.Path.LOCAL_IMAGE_STORAGE_PATH, request.MangaImage);
+        string imageUrl = await FileHelper.SaveImageAsync(Common.Path.LOCAL_MANGA_IMAGE_STORAGE_PATH, request.MangaImage);
         //check user post exist or not ? 
         if (!await _userService.CheckUserExist(request.PostedBy))
             return new ApiResponse<MangaResponse>(Common.Message.VALIDATE_MESSAGE_USER_NOT_EXIST, null, 400);
@@ -234,7 +234,7 @@ public class MangaService : IMangaService
                 var validExtensions = new List<string>() { ".png", ".jpg", ".jfif", ".jpeg" };
                 if (!FileHelper.CheckValidFileExtension(validExtensions, request.MangaImage.FileName))
                     return new ApiResponse<MangaResponse>("", null, 400);
-                mangaEntity.MangaImage = await FileHelper.SaveImageAsync(Common.Path.LOCAL_IMAGE_STORAGE_PATH, request.MangaImage);
+                mangaEntity.MangaImage = await FileHelper.SaveImageAsync(Common.Path.LOCAL_MANGA_IMAGE_STORAGE_PATH , request.MangaImage);
                 _logger.LogInformation(Message.MESSAGE_FILE_SAVE_SUCCESSFUL + $"Path: {mangaEntity.MangaImage}");
             }
             else
