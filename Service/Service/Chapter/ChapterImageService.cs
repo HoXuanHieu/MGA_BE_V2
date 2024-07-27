@@ -72,9 +72,20 @@ public class ChapterImageService : IChapterImageService
         }
     }
 
-    public Task<List<ChapterImageResponse>> GetChapterImagesByChapterIdAsync(string chapterId)
+    public async Task<List<ChapterImageResponse>> GetChapterImagesByChapterIdAsync(string chapterId)
     {
-        throw new NotImplementedException();
+        var result = new List<ChapterImageResponse>();
+        var data = await _chapterImageRepository.GetImageByChapterIdAsync(chapterId);
+        foreach(var item in data)
+        {
+            result.Add(new ChapterImageResponse
+            {
+                ChapterImageId = item.ChapterImageId,
+                ChapterImageName = item.ChapterImageName,
+                ChapterImagePath = item.ChapterImagePath,
+            });
+        }
+        return result;
     }
 }
 
