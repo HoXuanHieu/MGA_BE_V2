@@ -13,7 +13,7 @@ public class ChapterImageEntity
 
     [Required]
     [MaxLength(70)]
-    public String ChapterName { get; set; }
+    public String ChapterImageName { get; set; }
 
     [Required]
     public DateTime DateCreate { get; set; } = DateTime.Now;
