@@ -33,10 +33,8 @@ public class ChapterImageRepository : IChapterImageRepository
         {
             var message = $"Create Chapter image fail, throw with exception: {ex.Message}";
             _logger.LogError(message);
-           throw new Exception(Message.MESSAGE_CHAPTER_CREATE_SUCCESSFUL);
+           throw new Exception(Message.MESSAGE_CHAPTER_IMAGE_CREATE_FAIL);
         }
-
-
     }
 
     public async Task<String> DeleteImageByChapterId(string chapterId)
