@@ -1,6 +1,7 @@
 ﻿using Common;
 using Microsoft.Extensions.Logging;
 using Models;
+using Models.Entities;
 using Repositories;
 using Web_API.ResponseModel;
 
@@ -20,9 +21,33 @@ public class ChapterService : IChapterService
         _chapterImageService = chapterImageService;
         _mangaService = mangaService;
     }
-    public Task<ApiResponse<ChapterResponse>> CreateChapterAsync(CreateChapterImageRequest request)
+    public async Task<ApiResponse<ChapterResponse>> CreateChapterAsync(CreateChapterRequest request)
     {
-        throw new NotImplementedException();
+        var manga = await _mangaService.GetMangaByIdAsync(request.MangaId);
+        if (manga.Content == null)
+        {
+            return new ApiResponse<ChapterResponse>(manga.Message, null, manga.Status);
+        }
+        var entity = new ChapterEntity()
+        {
+            ChapterName = request.ChapterName,
+            LastActivity = "Create chapter",
+            MangaId = request.MangaId,
+        };
+        try
+        {
+            var createChapter = await _chapterRepository.CreateChapterAsync(entity);
+            var response = new ChapterResponse
+            {
+                ChapterId = createChapter.ChapterId,
+                ChapterName = createChapter.ChapterName,
+                DateCreate = createChapter.DateCreated
+            };
+            return new ApiResponse<ChapterResponse>(Message.MESSAGE_CHAPTER_CREATE_SUCCESSFUL, response, 200);
+        }catch(Exception ex)
+        {
+            return new ApiResponse<ChapterResponse>(ex.Message, null, 500);
+        }
     }
 
     public async Task<ApiResponse<List<ChapterResponse>>> GetAllChapterByMangaIdAsync(string mangaId)
