@@ -37,11 +37,12 @@ public class ChapterService : IChapterService
         try
         {
             var createChapter = await _chapterRepository.CreateChapterAsync(entity);
+            var chapterImages = await _chapterImageService.CreateChapterImagesAsync(createChapter.ChapterId, createChapter.ChapterName, manga.Content.MangaName, request.ChapterImage);
             var response = new ChapterResponse
             {
                 ChapterId = createChapter.ChapterId,
                 ChapterName = createChapter.ChapterName,
-                DateCreate = createChapter.DateCreated
+                DateCreate = createChapter.DateCreated             
             };
             return new ApiResponse<ChapterResponse>(Message.MESSAGE_CHAPTER_CREATE_SUCCESSFUL, response, 200);
         }catch(Exception ex)
@@ -89,16 +90,16 @@ public class ChapterService : IChapterService
         return new ApiResponse<DetailChapterResponse>(Message.MESSAGE_CHAPTER_GET_SUCCESSFUL, response, 200);
     }
 
-    public Task<ApiResponse<bool>> RemoveChapterAsync(string chapterId)
+    public async Task<ApiResponse<bool>> RemoveChapterAsync(string chapterId)
     {
         try
         {
-            // remove Image before
-            // remove chapter 
+            var result = await _chapterImageService.DeleteChapterImagesByChapterIdAsync(chapterId);
+            var response = await _chapterRepository.RemoveChapterAsync(chapterId);
+            return new ApiResponse<bool>(Message.MESSAGE_CHAPTER_DELETE_SUCCESSFUL, true, 200);
         }catch(Exception ex)
         {
-            // check exception and return api 
+            return new ApiResponse<bool>(ex.Message, false, 500);
         }
-        throw new NotImplementedException();
     }
 }
