@@ -16,16 +16,28 @@ public class ChapterRepository : IChapterRepository
         _logger = logger;
     }
 
-    public Task<ChapterEntity> CreateChapterAsync(ChapterEntity request)
+    public async Task<ChapterEntity> CreateChapterAsync(ChapterEntity request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await _context.AddAsync(request);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Create Chapter successful at time: {DateTime.Now}");
+            return result.Entity;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Create Chapter fail with exeption: {ex.Message}");
+            throw new Exception(Message.MESSAGE_CHAPTER_CREATE_FAIL);
+        }
     }
 
     public async Task<List<ChapterEntity>> GetAllChapterAsync(String mangagId)
     {
         var list = new List<ChapterEntity>();
         var data = await _context.Chapters.Where(x => x.MangaId == mangagId).ToListAsync();
-        foreach (var item in data) {
+        foreach (var item in data)
+        {
             list.Add(item);
         }
         return list;
@@ -39,7 +51,7 @@ public class ChapterRepository : IChapterRepository
     public async Task<String> RemoveChapterAsync(string chapterId)
     {
         var entity = await GetChapterByIdAsync(chapterId);
-        if(entity == null)
+        if (entity == null)
         {
             //throw could not found chapter
             throw new Exception(Message.MESSAGE_CHAPTER_DOES_NOT_EXIST);

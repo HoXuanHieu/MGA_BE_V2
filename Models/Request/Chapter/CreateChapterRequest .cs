@@ -1,6 +1,6 @@
 ﻿namespace Models;
 
-public class CreateChpaterRequest
+public class CreateChapterRequest
 {
     public String ChapterName { get; set; }
     public String MangaId { get; set; }
