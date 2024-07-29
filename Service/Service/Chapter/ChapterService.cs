@@ -91,6 +91,14 @@ public class ChapterService : IChapterService
 
     public Task<ApiResponse<bool>> RemoveChapterAsync(string chapterId)
     {
+        try
+        {
+            // remove Image before
+            // remove chapter 
+        }catch(Exception ex)
+        {
+            // check exception and return api 
+        }
         throw new NotImplementedException();
     }
 }
