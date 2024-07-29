@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Entities;
@@ -30,8 +31,29 @@ public class ChapterRepository : IChapterRepository
         return list;
     }
 
-    public Task<bool> RemoveChapterAsync(string chapterId)
+    public async Task<ChapterEntity> GetChapterByIdAsync(string ChapterId)
     {
-        throw new NotImplementedException();
+        return await _context.Chapters.FirstOrDefaultAsync(x => x.ChapterId.Equals(ChapterId));
+    }
+
+    public async Task<String> RemoveChapterAsync(string chapterId)
+    {
+        var entity = await GetChapterByIdAsync(chapterId);
+        if(entity == null)
+        {
+            //throw could not found chapter
+            throw new Exception(Message.MESSAGE_CHAPTER_DOES_NOT_EXIST);
+        }
+        try
+        {
+            var result = _context.Chapters.Remove(entity);
+            await _context.SaveChangesAsync();
+            return Message.MESSAGE_CHAPTER_DELETE_SUCCESSFUL;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Delete Chapter fail, with exception: {ex.Message}");
+            throw new Exception(Message.MESSAGE_CHAPTER_DELETE_FAIL);
+        }
     }
 }
