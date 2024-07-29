@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
@@ -19,6 +20,7 @@ namespace Web_API.Controllers.Manga
         // add pagination
         [HttpGet]
         [Route("getall")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllMangaAsync()
         {
             var response = await _service.GetAllMangaAsync();
@@ -42,6 +44,7 @@ namespace Web_API.Controllers.Manga
 
         [HttpPost]
         [Route("create")]
+        [Authorize(Roles = "poster")]
         public async Task<IActionResult> CreateMangaAsync(CreateMangaRequest request)
         {
             var response = await _service.CreateMangaAsync(request);
@@ -50,6 +53,7 @@ namespace Web_API.Controllers.Manga
 
         [HttpDelete]
         [Route("delete/{mangaId}")]
+        [Authorize(Roles = "admin,poster")]
         public async Task<IActionResult> DeleteMangaAsync(String mangaId)
         {
             var response = await _service.DeleteMangaAsync(mangaId);
@@ -58,6 +62,7 @@ namespace Web_API.Controllers.Manga
 
         [HttpPut]
         [Route("update")]
+        [Authorize(Roles = "admin,poster")]
         public async Task<IActionResult> UpdateMangaAsync(UpdateMangaRequest request)
         {
             var response = await _service.UpdateMangaAsync(request);
@@ -66,6 +71,7 @@ namespace Web_API.Controllers.Manga
 
         [HttpPut]
         [Route("approve")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ApproveMangaAsync(String mangaId, String modifiedBy)
         {
             var response = await _service.ApproveMangaAsync(mangaId, modifiedBy);
