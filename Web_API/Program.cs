@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Service;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Web_API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,9 +56,10 @@ service.AddScoped<IUserService, UserService>();
 service.AddScoped<ISecureService, SecureService>();
 service.AddScoped<IMangaService, MangaService>();
 service.AddScoped<IChapterService, ChapterService>();
+service.AddScoped<IChapterImageService, ChapterImageService>();
 #endregion
 
-
+service.AddSingleton<IAuthorizationMiddlewareResultHandler, AuthenticationMiddlewareHandlerService>();
 //service.AddIdentityCore<UserEntity>(options =>
 //{
 //    options.SignIn.RequireConfirmedAccount = true;
